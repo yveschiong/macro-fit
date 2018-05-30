@@ -1,17 +1,22 @@
-package com.yveschiong.macrofit
+package com.yveschiong.macrofit.activities
 
 import android.os.Bundle
-import android.support.design.widget.Snackbar
 import android.support.design.widget.NavigationView
+import android.support.design.widget.Snackbar
+import android.support.v4.app.Fragment
 import android.support.v4.view.GravityCompat
 import android.support.v7.app.ActionBarDrawerToggle
-import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
+import com.yveschiong.macrofit.R
+import com.yveschiong.macrofit.extensions.replaceFragment
+import com.yveschiong.macrofit.fragments.FoodFragment
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
 
-class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
+class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedListener {
+
+    private var fragments = HashMap<Int, Fragment>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -23,12 +28,14 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     .setAction("Action", null).show()
         }
 
-        val toggle = ActionBarDrawerToggle(
-                this, drawer_layout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
+        val toggle = ActionBarDrawerToggle(this, drawer_layout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
         drawer_layout.addDrawerListener(toggle)
         toggle.syncState()
 
         nav_view.setNavigationItemSelectedListener(this)
+
+        nav_view.setCheckedItem(R.id.nav_food)
+        switchFragments(R.id.nav_food)
     }
 
     override fun onBackPressed() {
@@ -56,29 +63,21 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
-        // Handle navigation view item clicks here.
-        when (item.itemId) {
-            R.id.nav_camera -> {
-                // Handle the camera action
-            }
-            R.id.nav_gallery -> {
+        switchFragments(item.itemId)
+        drawer_layout.closeDrawer(GravityCompat.START)
+        return true
+    }
 
-            }
-            R.id.nav_slideshow -> {
-
-            }
-            R.id.nav_manage -> {
-
-            }
-            R.id.nav_share -> {
-
-            }
-            R.id.nav_send -> {
-
+    fun switchFragments(id: Int) {
+        if (!fragments.containsKey(id)) {
+            when (id) {
+                R.id.nav_food -> {
+                    fragments[id] = FoodFragment.newInstance()
+                }
+                else -> return
             }
         }
 
-        drawer_layout.closeDrawer(GravityCompat.START)
-        return true
+        replaceFragment(R.id.fragment, fragments[id]!!)
     }
 }
