@@ -7,6 +7,8 @@
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
 
+    <string name="calendar_scroll_behavior">com.yveschiong.macrofit.behaviors.ScrollingCalendarBehavior</string>
+
     <string name="food">Food</string>
     <string name="no_food">No food yet. Please add some food!</string>
 </resources>
