@@ -9,6 +9,7 @@ import android.support.v7.app.ActionBarDrawerToggle
 import android.view.Menu
 import android.view.MenuItem
 import com.yveschiong.macrofit.R
+import com.yveschiong.macrofit.extensions.isExpanded
 import com.yveschiong.macrofit.extensions.replaceFragment
 import com.yveschiong.macrofit.fragments.FoodFragment
 import kotlinx.android.synthetic.main.activity_main.*
@@ -38,6 +39,8 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
 
         nav_view.setCheckedItem(R.id.nav_food)
         switchFragments(R.id.nav_food)
+
+        datePicker.setOnClickListener{ appBarLayout.setExpanded(!appBarLayout.isExpanded()) }
     }
 
     override fun onBackPressed() {
