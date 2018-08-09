@@ -6,7 +6,7 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_food"
-            android:icon="@drawable/ic_baseline_fastfood"
+            android:icon="@drawable/ic_fastfood"
             android:title="@string/food" />
     </group>
 

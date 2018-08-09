@@ -6,6 +6,7 @@ import android.support.design.widget.Snackbar
 import android.support.v4.app.Fragment
 import android.support.v4.view.GravityCompat
 import android.support.v7.app.ActionBarDrawerToggle
+import android.util.SparseArray
 import android.view.Menu
 import android.view.MenuItem
 import com.yveschiong.macrofit.R
@@ -19,7 +20,7 @@ import java.util.*
 
 class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedListener {
 
-    private var fragments = HashMap<Int, Fragment>()
+    private var fragments = SparseArray<Fragment>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -76,10 +77,10 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
     }
 
     fun switchFragments(id: Int) {
-        if (!fragments.containsKey(id)) {
+        if (fragments.indexOfKey(id) >= 0) {
             when (id) {
                 R.id.nav_food -> {
-                    fragments[id] = FoodFragment.newInstance()
+                    fragments.put(id, FoodFragment.newInstance())
                 }
                 else -> return
             }

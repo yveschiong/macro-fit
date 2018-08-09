@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.yveschiong.macrofit.R
 import com.yveschiong.macrofit.extensions.afterMeasured
+import kotlinx.android.synthetic.main.fragment_food.*
 import kotlinx.android.synthetic.main.fragment_food.view.*
 
 class FoodFragment: Fragment() {
@@ -21,8 +22,8 @@ class FoodFragment: Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_food, container, false)
 
-        view.recyclerView.layoutManager = LinearLayoutManager(context)
-        view.afterMeasured { view.recyclerView.setEmptyView(emptyView) }
+        view.afterMeasured { recyclerView.setEmptyView(emptyView) }
+        recyclerView.layoutManager = LinearLayoutManager(context)
 
         return view
     }
