@@ -77,7 +77,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
     }
 
     fun switchFragments(id: Int) {
-        if (fragments.indexOfKey(id) >= 0) {
+        if (fragments.indexOfKey(id) < 0) {
             when (id) {
                 R.id.nav_food -> {
                     fragments.put(id, FoodFragment.newInstance())

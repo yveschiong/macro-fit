@@ -7,8 +7,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.yveschiong.macrofit.R
+import com.yveschiong.macrofit.adapters.FoodListAdapter
 import com.yveschiong.macrofit.extensions.afterMeasured
-import kotlinx.android.synthetic.main.fragment_food.*
+import com.yveschiong.macrofit.models.Food
+import com.yveschiong.macrofit.presenters.FoodListPresenter
 import kotlinx.android.synthetic.main.fragment_food.view.*
 
 class FoodFragment: Fragment() {
@@ -22,8 +24,22 @@ class FoodFragment: Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_food, container, false)
 
-        view.afterMeasured { recyclerView.setEmptyView(emptyView) }
-        recyclerView.layoutManager = LinearLayoutManager(context)
+        val testFoodList = ArrayList<Food>()
+
+        val food = Food("Brown Rice", 175.0f, 622.22f, 11.67f, 140.0f, 5.08f)
+        testFoodList.add(food)
+        testFoodList.add(food)
+        testFoodList.add(food)
+        testFoodList.add(food)
+        testFoodList.add(food)
+        testFoodList.add(food)
+        testFoodList.add(food)
+        testFoodList.add(food)
+        testFoodList.add(food)
+
+        view.afterMeasured { view.recyclerView.setEmptyView(emptyView) }
+        view.recyclerView.layoutManager = LinearLayoutManager(context)
+        view.recyclerView.adapter = FoodListAdapter(FoodListPresenter(testFoodList))
 
         return view
     }
