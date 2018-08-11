@@ -21,10 +21,11 @@
             android:fitsSystemWindows="true"
             android:minHeight="?attr/actionBarSize"
             app:contentScrim="?attr/colorPrimary"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed|snap"
             app:statusBarScrim="?attr/colorPrimaryDark">
 
             <com.yveschiong.easycalendar.views.MonthView
+                android:id="@+id/monthView"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/date_picker_calendar_height"
                 android:layout_marginTop="?attr/actionBarSize"

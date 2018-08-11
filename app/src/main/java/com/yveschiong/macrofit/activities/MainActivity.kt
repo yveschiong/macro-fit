@@ -9,7 +9,9 @@ import android.support.v7.app.ActionBarDrawerToggle
 import android.util.SparseArray
 import android.view.Menu
 import android.view.MenuItem
+import com.yveschiong.macrofit.App
 import com.yveschiong.macrofit.R
+import com.yveschiong.macrofit.bus.events.DateEvents
 import com.yveschiong.macrofit.extensions.getNormalString
 import com.yveschiong.macrofit.extensions.isExpanded
 import com.yveschiong.macrofit.extensions.replaceFragment
@@ -41,9 +43,20 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         nav_view.setNavigationItemSelectedListener(this)
 
         nav_view.setCheckedItem(R.id.nav_food)
-        switchFragments(R.id.nav_food)
+        switchToFragment(R.id.nav_food)
 
-        datePicker.setOnClickListener{ appBarLayout.setExpanded(!appBarLayout.isExpanded()) }
+        // Expand and collapse the calendar/datepicker when clicked
+        datePicker.setOnClickListener { toggleExpandedAppBar() }
+
+        // Post a switched date event when the month view selects a different date
+        monthView.setOnSelectedDayListener { day ->
+            toggleExpandedAppBar()
+            App.graph.bus.post(DateEvents.SwitchedDateEvent(day))
+        }
+    }
+
+    fun toggleExpandedAppBar() {
+        appBarLayout.setExpanded(!appBarLayout.isExpanded())
     }
 
     override fun onBackPressed() {
@@ -71,12 +84,12 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
-        switchFragments(item.itemId)
+        switchToFragment(item.itemId)
         drawer_layout.closeDrawer(GravityCompat.START)
         return true
     }
 
-    fun switchFragments(id: Int) {
+    fun switchToFragment(id: Int) {
         if (fragments.indexOfKey(id) < 0) {
             when (id) {
                 R.id.nav_food -> {
