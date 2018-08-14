@@ -13,6 +13,7 @@ import com.yveschiong.macrofit.bus.events.DateEvents
 import com.yveschiong.macrofit.extensions.afterMeasured
 import com.yveschiong.macrofit.models.Food
 import com.yveschiong.macrofit.presenters.FoodListPresenter
+import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
@@ -33,11 +34,16 @@ class FoodFragment: Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_food, container, false)
 
-        App.graph.foodRepository.addFood(Food(System.currentTimeMillis(), "Brown Rice 1", 175.0f, 622.22f, 11.67f, 140.0f, 5.08f))
-        App.graph.foodRepository.addFood(Food(System.currentTimeMillis(), "Brown Rice 2", 175.0f, 622.22f, 11.67f, 140.0f, 5.08f))
-        App.graph.foodRepository.addFood(Food(System.currentTimeMillis(), "Brown Rice 3", 175.0f, 622.22f, 11.67f, 140.0f, 5.08f))
-        App.graph.foodRepository.addFood(Food(System.currentTimeMillis(), "Brown Rice 4", 175.0f, 622.22f, 11.67f, 140.0f, 5.08f))
-        App.graph.foodRepository.addFood(Food(System.currentTimeMillis(), "Brown Rice 5", 175.0f, 622.22f, 11.67f, 140.0f, 5.08f))
+        App.graph.foodRepository.deleteAllFood()
+            .subscribeOn(Schedulers.io())
+            .subscribe {
+                // Add new test food after deleting old food
+                App.graph.foodRepository.addFood(Food(System.currentTimeMillis(), "Brown Rice 1", 175.0f, 622.22f, 11.67f, 140.0f, 5.08f))
+                App.graph.foodRepository.addFood(Food(System.currentTimeMillis(), "Brown Rice 2", 175.0f, 622.22f, 11.67f, 140.0f, 5.08f))
+                App.graph.foodRepository.addFood(Food(System.currentTimeMillis(), "Brown Rice 3", 175.0f, 622.22f, 11.67f, 140.0f, 5.08f))
+                App.graph.foodRepository.addFood(Food(System.currentTimeMillis(), "Brown Rice 4", 175.0f, 622.22f, 11.67f, 140.0f, 5.08f))
+                App.graph.foodRepository.addFood(Food(System.currentTimeMillis(), "Brown Rice 5", 175.0f, 622.22f, 11.67f, 140.0f, 5.08f))
+            }
 
         view.afterMeasured { view.recyclerView.setEmptyView(emptyView) }
         view.recyclerView.layoutManager = LinearLayoutManager(context)
@@ -60,9 +66,18 @@ class FoodFragment: Fragment() {
         // Register to event bus for switched date events
         disposable.add(App.graph.bus.listen<DateEvents.SwitchedDateEvent>()
             .subscribeOn(Schedulers.io())
-            .switchMap {
+            .switchMap { day ->
+                // Get new foods that match the day criteria
                 App.graph.foodRepository.getFood()
+                    .subscribeOn(Schedulers.io())
+                    .flatMap { list ->
+                        Observable.fromIterable(list)
+                            .filter { food -> food.name.contains("3") }
+                            .toList()
+                            .toObservable()
+                    }
             }
+            .observeOn(AndroidSchedulers.mainThread())
             .subscribe {
                 adapter?.presenter = FoodListPresenter(it)
                 adapter?.notifyDataSetChanged()

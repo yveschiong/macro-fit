@@ -1,6 +1,5 @@
 package com.yveschiong.macrofit.repositories
 
-import android.util.Log
 import com.yveschiong.macrofit.database.daos.FoodDao
 import com.yveschiong.macrofit.models.Food
 import io.reactivex.Observable
@@ -14,8 +13,11 @@ class FoodRepository(private val foodDao: FoodDao) {
     fun addFood(food: Food) {
         Observable.fromCallable { foodDao.insert(food) }
             .subscribeOn(Schedulers.io())
-            .subscribe {
-                Log.d("FoodRepository", "Inserted ${food.id} into db")
-            }
+            .subscribe()
+    }
+
+    // Want to get the observable so we can observe the deletion
+    fun deleteAllFood(): Observable<Unit> {
+        return Observable.fromCallable { foodDao.deleteAll() }
     }
 }

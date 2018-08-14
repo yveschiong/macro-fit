@@ -16,7 +16,9 @@ import com.yveschiong.macrofit.extensions.getNormalString
 import com.yveschiong.macrofit.extensions.isExpanded
 import com.yveschiong.macrofit.extensions.replaceFragment
 import com.yveschiong.macrofit.fragments.FoodFragment
+import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
 import java.util.*
@@ -63,6 +65,8 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
 
         // Register to event bus for switched date events
         disposable.add(App.graph.bus.listen<DateEvents.SwitchedDateEvent>()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
                     titleText.text = it.switchedDate.time.getNormalString()
                 })

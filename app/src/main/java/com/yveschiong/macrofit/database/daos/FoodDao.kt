@@ -17,4 +17,7 @@ interface FoodDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertAll(food: List<Food>)
+
+    @Query("DELETE FROM food")
+    fun deleteAll()
 }
