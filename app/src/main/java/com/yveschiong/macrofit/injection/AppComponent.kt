@@ -2,6 +2,7 @@ package com.yveschiong.macrofit.injection
 
 import android.content.Context
 import com.yveschiong.macrofit.bus.EventBus
+import com.yveschiong.macrofit.repositories.FoodRepository
 import dagger.Component
 import javax.inject.Singleton
 
@@ -10,4 +11,5 @@ import javax.inject.Singleton
 interface AppComponent {
     val context: Context
     val bus: EventBus
+    val foodRepository: FoodRepository
 }

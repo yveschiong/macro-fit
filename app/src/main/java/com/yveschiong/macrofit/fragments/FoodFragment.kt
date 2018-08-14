@@ -13,13 +13,14 @@ import com.yveschiong.macrofit.bus.events.DateEvents
 import com.yveschiong.macrofit.extensions.afterMeasured
 import com.yveschiong.macrofit.models.Food
 import com.yveschiong.macrofit.presenters.FoodListPresenter
-import io.reactivex.disposables.Disposable
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_food.view.*
-import java.util.*
 
 class FoodFragment: Fragment() {
 
-    private var disposable: Disposable? = null
+    private var disposable = CompositeDisposable()
 
     private var adapter: FoodListAdapter? = null
 
@@ -32,25 +33,23 @@ class FoodFragment: Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_food, container, false)
 
-        val testFoodList = ArrayList<Food>()
-
-        val food = Food(System.currentTimeMillis(), "Brown Rice", 175.0f, 622.22f, 11.67f, 140.0f, 5.08f)
-        testFoodList.add(food)
-        testFoodList.add(food)
-        testFoodList.add(food)
-        testFoodList.add(food)
-        testFoodList.add(food)
-        testFoodList.add(food)
-        testFoodList.add(food)
-        testFoodList.add(food)
-        testFoodList.add(food)
-
-        adapter = FoodListAdapter(FoodListPresenter(testFoodList))
+        App.graph.foodRepository.addFood(Food(System.currentTimeMillis(), "Brown Rice 1", 175.0f, 622.22f, 11.67f, 140.0f, 5.08f))
+        App.graph.foodRepository.addFood(Food(System.currentTimeMillis(), "Brown Rice 2", 175.0f, 622.22f, 11.67f, 140.0f, 5.08f))
+        App.graph.foodRepository.addFood(Food(System.currentTimeMillis(), "Brown Rice 3", 175.0f, 622.22f, 11.67f, 140.0f, 5.08f))
+        App.graph.foodRepository.addFood(Food(System.currentTimeMillis(), "Brown Rice 4", 175.0f, 622.22f, 11.67f, 140.0f, 5.08f))
+        App.graph.foodRepository.addFood(Food(System.currentTimeMillis(), "Brown Rice 5", 175.0f, 622.22f, 11.67f, 140.0f, 5.08f))
 
         view.afterMeasured { view.recyclerView.setEmptyView(emptyView) }
         view.recyclerView.layoutManager = LinearLayoutManager(context)
-        view.recyclerView.adapter = adapter
         view.recyclerView.isNestedScrollingEnabled = false
+
+        App.graph.foodRepository.getFood()
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe {
+                adapter = FoodListAdapter(FoodListPresenter(it))
+                view.recyclerView.adapter = adapter
+            }
 
         return view
     }
@@ -59,22 +58,21 @@ class FoodFragment: Fragment() {
         super.onResume()
 
         // Register to event bus for switched date events
-        disposable = App.graph.bus.listen<DateEvents.SwitchedDateEvent>()
-                .subscribe {
-                    val testFoodList = ArrayList<Food>()
-
-                    val food = Food(it.switchedDate.timeInMillis, "Brown Rice", 175.0f, 622.22f, 11.67f, 140.0f, 5.08f)
-                    testFoodList.add(food)
-
-                    adapter?.presenter = FoodListPresenter(testFoodList)
-                    adapter?.notifyDataSetChanged()
-                }
+        disposable.add(App.graph.bus.listen<DateEvents.SwitchedDateEvent>()
+            .subscribeOn(Schedulers.io())
+            .switchMap {
+                App.graph.foodRepository.getFood()
+            }
+            .subscribe {
+                adapter?.presenter = FoodListPresenter(it)
+                adapter?.notifyDataSetChanged()
+            })
     }
 
     override fun onPause() {
         super.onPause()
 
         // Unregister from event bus
-        disposable?.dispose()
+        disposable.clear()
     }
 }

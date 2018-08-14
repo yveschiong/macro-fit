@@ -16,14 +16,14 @@ import com.yveschiong.macrofit.extensions.getNormalString
 import com.yveschiong.macrofit.extensions.isExpanded
 import com.yveschiong.macrofit.extensions.replaceFragment
 import com.yveschiong.macrofit.fragments.FoodFragment
-import io.reactivex.disposables.Disposable
+import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
 import java.util.*
 
 class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedListener {
 
-    private var disposable: Disposable? = null
+    private var disposable = CompositeDisposable()
 
     private var fragments = SparseArray<Fragment>()
 
@@ -62,17 +62,17 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         super.onResume()
 
         // Register to event bus for switched date events
-        disposable = App.graph.bus.listen<DateEvents.SwitchedDateEvent>()
+        disposable.add(App.graph.bus.listen<DateEvents.SwitchedDateEvent>()
                 .subscribe {
                     titleText.text = it.switchedDate.time.getNormalString()
-                }
+                })
     }
 
     override fun onPause() {
         super.onPause()
 
         // Unregister from event bus
-        disposable?.dispose()
+        disposable.clear()
     }
 
     fun toggleExpandedAppBar() {
