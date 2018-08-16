@@ -2,7 +2,6 @@ package com.yveschiong.macrofit.activities
 
 import android.os.Bundle
 import android.support.design.widget.NavigationView
-import android.support.design.widget.Snackbar
 import android.support.v4.app.Fragment
 import android.support.v4.view.GravityCompat
 import android.support.v7.app.ActionBarDrawerToggle
@@ -15,6 +14,7 @@ import com.yveschiong.macrofit.R
 import com.yveschiong.macrofit.bus.events.DateEvents
 import com.yveschiong.macrofit.extensions.getNormalString
 import com.yveschiong.macrofit.extensions.isExpanded
+import com.yveschiong.macrofit.extensions.launchActivity
 import com.yveschiong.macrofit.extensions.replaceFragment
 import com.yveschiong.macrofit.fragments.FoodFragment
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -24,7 +24,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
 import java.util.*
 
-class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedListener {
+class MainActivity: BaseActivity(), NavigationView.OnNavigationItemSelectedListener {
 
     private var disposable = CompositeDisposable()
 
@@ -37,9 +37,9 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
 
         titleText.text = Date().getNormalString()
 
-        fab.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                    .setAction("Action", null).show()
+        fab.setOnClickListener {
+            // When the fab is clicked, launch the add food activity
+            launchActivity(AddFoodActivity::class.java)
         }
 
         val toggle = ActionBarDrawerToggle(this, drawer_layout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)

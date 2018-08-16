@@ -12,14 +12,11 @@ import com.yveschiong.macrofit.R
 import com.yveschiong.macrofit.adapters.FoodListAdapter
 import com.yveschiong.macrofit.bus.events.DateEvents
 import com.yveschiong.macrofit.extensions.afterMeasured
-import com.yveschiong.macrofit.models.Food
-import com.yveschiong.macrofit.models.Weight
 import com.yveschiong.macrofit.presenters.FoodListPresenter
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_food.view.*
-import java.util.*
 
 class FoodFragment: Fragment() {
 
@@ -36,32 +33,6 @@ class FoodFragment: Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_food, container, false)
 
-        App.graph.foodRepository.deleteAllFood()
-            .subscribeOn(Schedulers.io())
-            .subscribe {
-                val calendar = Calendar.getInstance()
-                calendar.add(Calendar.DATE, -2)
-
-                // Add new test food after deleting old food
-                App.graph.foodRepository.addFood(Food(calendar.timeInMillis, "Brown Rice 1", 175.0f, Weight.PIECES, 622.22f, 11.67f, 140.0f, 5.08f))
-
-                calendar.add(Calendar.DATE, 1)
-
-                App.graph.foodRepository.addFood(Food(calendar.timeInMillis, "Brown Rice 2", 175.0f, Weight.PIECES, 622.22f, 11.67f, 140.0f, 5.08f))
-
-                calendar.add(Calendar.DATE, 1)
-
-                App.graph.foodRepository.addFood(Food(calendar.timeInMillis, "Brown Rice 3", 175.0f, Weight.GRAMS, 622.22f, 11.67f, 140.0f, 5.08f))
-
-                calendar.add(Calendar.DATE, 1)
-
-                App.graph.foodRepository.addFood(Food(calendar.timeInMillis, "Brown Rice 4", 175.0f, Weight.GRAMS, 622.22f, 11.67f, 140.0f, 5.08f))
-
-                calendar.add(Calendar.DATE, 1)
-
-                App.graph.foodRepository.addFood(Food(calendar.timeInMillis, "Brown Rice 5", 175.0f, Weight.PIECES, 622.22f, 11.67f, 140.0f, 5.08f))
-            }
-
         view.afterMeasured { view.recyclerView.setEmptyView(emptyView) }
         view.recyclerView.layoutManager = LinearLayoutManager(context)
         view.recyclerView.isNestedScrollingEnabled = false
@@ -72,9 +43,10 @@ class FoodFragment: Fragment() {
         App.graph.foodRepository.getFoodBetweenTime(range.start.timeInMillis, range.end.timeInMillis)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe {
-                adapter = FoodListAdapter(FoodListPresenter(it))
+            .subscribe { list ->
+                adapter = FoodListAdapter(FoodListPresenter(list))
                 view.recyclerView.adapter = adapter
+                adapter?.notifyDataSetChanged()
             }
 
         return view
