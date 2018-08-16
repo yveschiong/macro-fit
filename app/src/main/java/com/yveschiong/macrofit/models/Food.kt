@@ -15,6 +15,10 @@ data class Food(
     @ColumnInfo(name = "amount")
     var amount: Float,
 
+    @ColumnInfo(name = "unit")
+    @Weight.Unit
+    var unit: String,
+
     @ColumnInfo(name = "calories")
     var calories: Float,
 

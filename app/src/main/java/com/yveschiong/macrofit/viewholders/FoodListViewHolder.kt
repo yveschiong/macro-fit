@@ -28,8 +28,8 @@ class FoodListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), Fo
         foodNameTextView.text = name
     }
 
-    override fun setAmountText(amount: Float) {
-        amountTextView.text = itemView.context.getString(R.string.amount_grams_text, amount)
+    override fun setAmountText(amount: Float, unit: String) {
+        amountTextView.text = itemView.context.getString(R.string.amount_text, amount, unit)
     }
 
     override fun setCaloriesText(calories: Float) {

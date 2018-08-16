@@ -8,7 +8,7 @@ class FoodListPresenter(private val foodList: List<Food>) {
     fun populate(viewInterface: FoodListViewInterface, position: Int) {
         with(foodList[position]) {
             viewInterface.setFoodName(name)
-            viewInterface.setAmountText(amount)
+            viewInterface.setAmountText(amount, unit)
             viewInterface.setCaloriesText(calories)
             viewInterface.setProteinText(protein)
             viewInterface.setCarbsText(carbs)

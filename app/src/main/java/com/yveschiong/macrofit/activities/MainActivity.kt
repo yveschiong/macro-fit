@@ -9,6 +9,7 @@ import android.support.v7.app.ActionBarDrawerToggle
 import android.util.SparseArray
 import android.view.Menu
 import android.view.MenuItem
+import com.yveschiong.easycalendar.views.MonthView
 import com.yveschiong.macrofit.App
 import com.yveschiong.macrofit.R
 import com.yveschiong.macrofit.bus.events.DateEvents
@@ -51,12 +52,37 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         switchToFragment(R.id.nav_food)
 
         // Expand and collapse the calendar/datepicker when clicked
-        datePicker.setOnClickListener { toggleExpandedAppBar() }
+        datePicker.setOnClickListener {
+            // Have to reset the month view month in case of selected date mismatch with the view
+            // and only do so when the date picker is opened from an unexpanded state
+            if (!appBarLayout.isExpanded()) {
+                monthView.setMonth(monthView.selectedDay)
+            }
+
+            toggleExpandedAppBar()
+        }
 
         // Post a switched date event when the month view selects a different date
-        monthView.setOnSelectedDayListener { day ->
+        monthView.onSelectedDayListener = MonthView.OnSelectedDayListener { day ->
             toggleExpandedAppBar()
             App.graph.bus.post(DateEvents.SwitchedDateEvent(day))
+        }
+
+        // Control the chevron clicks on the month view
+        monthView.onChevronSelectedListener = object: MonthView.OnChevronSelectedListener {
+            override fun onLeftChevronSelected() {
+                // Set the month to a month earlier
+                val month = monthView.month.start
+                month.add(Calendar.MONTH, -1)
+                monthView.setMonth(month)
+            }
+
+            override fun onRightChevronSelected() {
+                // Set the month to a month later
+                val month = monthView.month.start
+                month.add(Calendar.MONTH, 1)
+                monthView.setMonth(month)
+            }
         }
     }
 
