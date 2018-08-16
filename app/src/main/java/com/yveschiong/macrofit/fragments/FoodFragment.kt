@@ -65,11 +65,10 @@ class FoodFragment: Fragment() {
         view.recyclerView.layoutManager = LinearLayoutManager(context)
         view.recyclerView.isNestedScrollingEnabled = false
 
-        val calendar = Calendar.getInstance()
-        val from = CalendarUtils.setEarliestCalendarDay(calendar).timeInMillis
-        val to = CalendarUtils.setLatestCalendarDay(calendar).timeInMillis
+        // Use today's time range for the initial fetch
+        val range = CalendarUtils.createCalendarRange()
 
-        App.graph.foodRepository.getFoodBetweenTime(from, to)
+        App.graph.foodRepository.getFoodBetweenTime(range.start.timeInMillis, range.end.timeInMillis)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe {
@@ -87,11 +86,12 @@ class FoodFragment: Fragment() {
         disposable.add(App.graph.bus.listen<DateEvents.SwitchedDateEvent>()
             .subscribeOn(Schedulers.io())
             .switchMap { day ->
-                val from = CalendarUtils.setEarliestCalendarDay(day.switchedDate).timeInMillis
-                val to = CalendarUtils.setLatestCalendarDay(day.switchedDate).timeInMillis
+                val range = CalendarUtils.createCalendarRange(day.switchedDate)
 
                 // Get new foods that match the day criteria
-                App.graph.foodRepository.getFoodBetweenTime(from, to).subscribeOn(Schedulers.io())
+                App.graph.foodRepository.getFoodBetweenTime(
+                    range.start.timeInMillis, range.end.timeInMillis
+                ).subscribeOn(Schedulers.io())
             }
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe {
