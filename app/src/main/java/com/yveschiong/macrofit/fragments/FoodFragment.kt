@@ -6,6 +6,7 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.yveschiong.easycalendar.utils.CalendarUtils
 import com.yveschiong.macrofit.App
 import com.yveschiong.macrofit.R
 import com.yveschiong.macrofit.adapters.FoodListAdapter
@@ -13,11 +14,11 @@ import com.yveschiong.macrofit.bus.events.DateEvents
 import com.yveschiong.macrofit.extensions.afterMeasured
 import com.yveschiong.macrofit.models.Food
 import com.yveschiong.macrofit.presenters.FoodListPresenter
-import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_food.view.*
+import java.util.*
 
 class FoodFragment: Fragment() {
 
@@ -37,19 +38,38 @@ class FoodFragment: Fragment() {
         App.graph.foodRepository.deleteAllFood()
             .subscribeOn(Schedulers.io())
             .subscribe {
+                val calendar = Calendar.getInstance()
+                calendar.add(Calendar.DATE, -2)
+
                 // Add new test food after deleting old food
-                App.graph.foodRepository.addFood(Food(System.currentTimeMillis(), "Brown Rice 1", 175.0f, 622.22f, 11.67f, 140.0f, 5.08f))
-                App.graph.foodRepository.addFood(Food(System.currentTimeMillis(), "Brown Rice 2", 175.0f, 622.22f, 11.67f, 140.0f, 5.08f))
-                App.graph.foodRepository.addFood(Food(System.currentTimeMillis(), "Brown Rice 3", 175.0f, 622.22f, 11.67f, 140.0f, 5.08f))
-                App.graph.foodRepository.addFood(Food(System.currentTimeMillis(), "Brown Rice 4", 175.0f, 622.22f, 11.67f, 140.0f, 5.08f))
-                App.graph.foodRepository.addFood(Food(System.currentTimeMillis(), "Brown Rice 5", 175.0f, 622.22f, 11.67f, 140.0f, 5.08f))
+                App.graph.foodRepository.addFood(Food(calendar.timeInMillis, "Brown Rice 1", 175.0f, 622.22f, 11.67f, 140.0f, 5.08f))
+
+                calendar.add(Calendar.DATE, 1)
+
+                App.graph.foodRepository.addFood(Food(calendar.timeInMillis, "Brown Rice 2", 175.0f, 622.22f, 11.67f, 140.0f, 5.08f))
+
+                calendar.add(Calendar.DATE, 1)
+
+                App.graph.foodRepository.addFood(Food(calendar.timeInMillis, "Brown Rice 3", 175.0f, 622.22f, 11.67f, 140.0f, 5.08f))
+
+                calendar.add(Calendar.DATE, 1)
+
+                App.graph.foodRepository.addFood(Food(calendar.timeInMillis, "Brown Rice 4", 175.0f, 622.22f, 11.67f, 140.0f, 5.08f))
+
+                calendar.add(Calendar.DATE, 1)
+
+                App.graph.foodRepository.addFood(Food(calendar.timeInMillis, "Brown Rice 5", 175.0f, 622.22f, 11.67f, 140.0f, 5.08f))
             }
 
         view.afterMeasured { view.recyclerView.setEmptyView(emptyView) }
         view.recyclerView.layoutManager = LinearLayoutManager(context)
         view.recyclerView.isNestedScrollingEnabled = false
 
-        App.graph.foodRepository.getFood()
+        val calendar = Calendar.getInstance()
+        val from = CalendarUtils.setEarliestCalendarDay(calendar).timeInMillis
+        val to = CalendarUtils.setLatestCalendarDay(calendar).timeInMillis
+
+        App.graph.foodRepository.getFoodBetweenTime(from, to)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe {
@@ -67,15 +87,11 @@ class FoodFragment: Fragment() {
         disposable.add(App.graph.bus.listen<DateEvents.SwitchedDateEvent>()
             .subscribeOn(Schedulers.io())
             .switchMap { day ->
+                val from = CalendarUtils.setEarliestCalendarDay(day.switchedDate).timeInMillis
+                val to = CalendarUtils.setLatestCalendarDay(day.switchedDate).timeInMillis
+
                 // Get new foods that match the day criteria
-                App.graph.foodRepository.getFood()
-                    .subscribeOn(Schedulers.io())
-                    .flatMap { list ->
-                        Observable.fromIterable(list)
-                            .filter { food -> food.name.contains("3") }
-                            .toList()
-                            .toObservable()
-                    }
+                App.graph.foodRepository.getFoodBetweenTime(from, to).subscribeOn(Schedulers.io())
             }
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe {

@@ -10,6 +10,10 @@ class FoodRepository(private val foodDao: FoodDao) {
         return foodDao.getFood().toObservable()
     }
 
+    fun getFoodBetweenTime(from: Long, to: Long): Observable<List<Food>> {
+        return foodDao.getFoodBetweenTime(from, to).toObservable()
+    }
+
     fun addFood(food: Food) {
         Observable.fromCallable { foodDao.insert(food) }
             .subscribeOn(Schedulers.io())
