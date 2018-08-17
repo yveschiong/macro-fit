@@ -40,14 +40,14 @@ class FoodFragment: Fragment() {
         // Use today's time range for the initial fetch
         val range = CalendarUtils.createCalendarRange()
 
-        App.graph.foodRepository.getFoodBetweenTime(range.start.timeInMillis, range.end.timeInMillis)
+        disposable.add(App.graph.foodRepository.getFoodBetweenTime(range.start.timeInMillis, range.end.timeInMillis)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe { list ->
-                adapter = FoodListAdapter(FoodListPresenter(list))
+            .subscribe {
+                adapter = FoodListAdapter(FoodListPresenter(it))
                 view.recyclerView.adapter = adapter
                 adapter?.notifyDataSetChanged()
-            }
+            })
 
         return view
     }

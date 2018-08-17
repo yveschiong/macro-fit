@@ -15,7 +15,11 @@
     <string name="food">Food</string>
     <string name="no_food">No food yet. Please add some food!</string>
 
-    <string name="amount_text">%1$.1f%2$s</string>
+    <string name="nutrition_facts">Nutrition Facts</string>
+    <string name="no_nutrition_facts">No nutrition facts yet. Please add some nutrition facts!</string>
+
+    <string name="food_amount_text">%1$.1f%2$s</string>
+    <string name="nutrition_fact_amount_text">per %1$.1f%2$s</string>
     <string name="calories_text">Calories: %1$.1f</string>
     <string name="protein_text">Protein: %1$.1f</string>
     <string name="carbs_text">Carbohydrates: %1$.1f</string>

@@ -4,23 +4,20 @@ import android.arch.persistence.room.Dao
 import android.arch.persistence.room.Insert
 import android.arch.persistence.room.OnConflictStrategy
 import android.arch.persistence.room.Query
-import com.yveschiong.macrofit.models.Food
+import com.yveschiong.macrofit.models.NutritionFact
 import io.reactivex.Single
 
 @Dao
-interface FoodDao {
-    @Query("SELECT * FROM food")
-    fun getFood(): Single<List<Food>>
-
-    @Query("SELECT * FROM food WHERE time_added BETWEEN :from AND :to")
-    fun getFoodBetweenTime(from: Long, to: Long): Single<List<Food>>
+interface NutritionFactsDao {
+    @Query("SELECT * FROM nutrition_facts")
+    fun getNutritionFacts(): Single<List<NutritionFact>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insert(food: Food)
+    fun insert(nutritionFact: NutritionFact)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertAll(food: List<Food>)
+    fun insertAll(nutritionFact: List<NutritionFact>)
 
-    @Query("DELETE FROM food")
+    @Query("DELETE FROM nutrition_facts")
     fun deleteAll()
 }

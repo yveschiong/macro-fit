@@ -4,9 +4,9 @@ import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.widget.TextView
 import com.yveschiong.macrofit.R
-import com.yveschiong.macrofit.interfaces.FoodListViewInterface
+import com.yveschiong.macrofit.interfaces.NutritionFactsListViewInterface
 
-class FoodListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), FoodListViewInterface {
+class NutritionFactsListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), NutritionFactsListViewInterface {
 
     private val foodNameTextView: TextView
     private val amountTextView: TextView
@@ -29,7 +29,7 @@ class FoodListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), Fo
     }
 
     override fun setAmountText(amount: Float, unit: String) {
-        amountTextView.text = itemView.context.getString(R.string.food_amount_text, amount, unit)
+        amountTextView.text = itemView.context.getString(R.string.nutrition_fact_amount_text, amount, unit)
     }
 
     override fun setCaloriesText(calories: Float) {

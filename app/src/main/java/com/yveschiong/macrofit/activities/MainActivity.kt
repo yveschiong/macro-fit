@@ -8,6 +8,7 @@ import android.support.v7.app.ActionBarDrawerToggle
 import android.util.SparseArray
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import com.yveschiong.easycalendar.views.MonthView
 import com.yveschiong.macrofit.App
 import com.yveschiong.macrofit.R
@@ -17,6 +18,7 @@ import com.yveschiong.macrofit.extensions.isExpanded
 import com.yveschiong.macrofit.extensions.launchActivity
 import com.yveschiong.macrofit.extensions.replaceFragment
 import com.yveschiong.macrofit.fragments.FoodFragment
+import com.yveschiong.macrofit.fragments.NutritionFactsFragment
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
@@ -35,8 +37,6 @@ class MainActivity: BaseActivity(), NavigationView.OnNavigationItemSelectedListe
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
 
-        titleText.text = Date().getNormalString()
-
         fab.setOnClickListener {
             // When the fab is clicked, launch the add food activity
             launchActivity(AddFoodActivity::class.java)
@@ -49,6 +49,7 @@ class MainActivity: BaseActivity(), NavigationView.OnNavigationItemSelectedListe
         nav_view.setNavigationItemSelectedListener(this)
 
         nav_view.setCheckedItem(R.id.nav_food)
+        setActionBarState(R.id.nav_food)
         switchToFragment(R.id.nav_food)
 
         // Expand and collapse the calendar/datepicker when clicked
@@ -134,9 +135,32 @@ class MainActivity: BaseActivity(), NavigationView.OnNavigationItemSelectedListe
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
+        // If the month view is showing then we want to hide it
+        if (appBarLayout.isExpanded()) {
+            toggleExpandedAppBar()
+        }
+
+        setActionBarState(item.itemId)
         switchToFragment(item.itemId)
         drawer_layout.closeDrawer(GravityCompat.START)
         return true
+    }
+
+    fun setActionBarState(id: Int) {
+        datePicker.visibility = View.GONE
+        when (id) {
+            R.id.nav_food -> {
+                datePicker.visibility = View.VISIBLE
+
+                // Reset the month view to today
+                monthView.selectedDay = Calendar.getInstance()
+                titleText.text = monthView.selectedDay.time.getNormalString()
+            }
+            R.id.nav_nutrition_facts -> {
+                titleText.text = getString(R.string.nutrition_facts)
+            }
+            else -> return
+        }
     }
 
     fun switchToFragment(id: Int) {
@@ -144,6 +168,9 @@ class MainActivity: BaseActivity(), NavigationView.OnNavigationItemSelectedListe
             when (id) {
                 R.id.nav_food -> {
                     fragments.put(id, FoodFragment.newInstance())
+                }
+                R.id.nav_nutrition_facts -> {
+                    fragments.put(id, NutritionFactsFragment.newInstance())
                 }
                 else -> return
             }

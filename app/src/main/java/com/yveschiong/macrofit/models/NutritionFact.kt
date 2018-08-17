@@ -4,11 +4,8 @@ import android.arch.persistence.room.ColumnInfo
 import android.arch.persistence.room.Entity
 import android.arch.persistence.room.PrimaryKey
 
-@Entity(tableName = "food")
-data class Food(
-    @ColumnInfo(name = "time_added")
-    var timeAdded: Long,
-
+@Entity(tableName = "nutrition_facts")
+data class NutritionFact(
     @ColumnInfo(name = "name")
     var name: String,
 
