@@ -37,20 +37,13 @@ class MainActivity: BaseActivity(), NavigationView.OnNavigationItemSelectedListe
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
 
-        fab.setOnClickListener {
-            // When the fab is clicked, launch the add food activity
-            launchActivity(AddFoodActivity::class.java)
-        }
-
         val toggle = ActionBarDrawerToggle(this, drawer_layout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
         drawer_layout.addDrawerListener(toggle)
         toggle.syncState()
 
         nav_view.setNavigationItemSelectedListener(this)
 
-        nav_view.setCheckedItem(R.id.nav_food)
-        setActionBarState(R.id.nav_food)
-        switchToFragment(R.id.nav_food)
+        setMenuNavigation(R.id.nav_nutrition_facts)
 
         // Expand and collapse the calendar/datepicker when clicked
         datePicker.setOnClickListener {
@@ -61,6 +54,18 @@ class MainActivity: BaseActivity(), NavigationView.OnNavigationItemSelectedListe
             }
 
             toggleExpandedAppBar()
+        }
+
+        fab.setOnClickListener {
+            // When the fab is clicked, launch the appropriate activity
+            when(supportFragmentManager.findFragmentById(R.id.fragment).tag?.toInt()) {
+                R.id.nav_food -> {
+                    launchActivity(AddFoodActivity::class.java)
+                }
+                R.id.nav_nutrition_facts -> {
+                    launchActivity(AddNutritionFactActivity::class.java)
+                }
+            }
         }
 
         // Post a switched date event when the month view selects a different date
@@ -140,10 +145,15 @@ class MainActivity: BaseActivity(), NavigationView.OnNavigationItemSelectedListe
             toggleExpandedAppBar()
         }
 
-        setActionBarState(item.itemId)
-        switchToFragment(item.itemId)
+        setMenuNavigation(item.itemId)
         drawer_layout.closeDrawer(GravityCompat.START)
         return true
+    }
+
+    fun setMenuNavigation(id: Int) {
+        nav_view.setCheckedItem(id)
+        setActionBarState(id)
+        switchToFragment(id)
     }
 
     fun setActionBarState(id: Int) {
@@ -176,6 +186,6 @@ class MainActivity: BaseActivity(), NavigationView.OnNavigationItemSelectedListe
             }
         }
 
-        replaceFragment(R.id.fragment, fragments[id]!!)
+        replaceFragment(R.id.fragment, fragments[id]!!, id.toString())
     }
 }
