@@ -9,6 +9,9 @@
         android:id="@+id/nameLayout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingTop="10dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent">
 
@@ -16,7 +19,7 @@
             android:id="@+id/name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Food Name" />
+            android:hint="@string/add_nutrition_fact_food_name" />
 
     </android.support.design.widget.TextInputLayout>
 
@@ -24,16 +27,40 @@
         android:id="@+id/weightLayout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingTop="10dp"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintRight_toLeftOf="@+id/unitsLayout"
         app:layout_constraintTop_toBottomOf="@+id/nameLayout">
 
         <android.support.design.widget.TextInputEditText
             android:id="@+id/weight"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Weight"
+            android:hint="@string/add_nutrition_fact_weight"
             android:inputType="numberDecimal" />
+
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/unitsLayout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingTop="10dp"
+        app:layout_constraintLeft_toRightOf="@id/weightLayout"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/nameLayout"
+        app:layout_constraintWidth_default="percent"
+        app:layout_constraintWidth_percent="0.2">
+
+        <android.support.design.widget.TextInputEditText
+            android:id="@+id/units"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/add_nutrition_fact_units" />
 
     </android.support.design.widget.TextInputLayout>
 

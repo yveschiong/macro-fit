@@ -25,4 +25,9 @@
     <string name="protein_text">Protein: %1$.1f</string>
     <string name="carbs_text">Carbohydrates: %1$.1f</string>
     <string name="fat_text">Fat: %1$.1f</string>
+
+    <string name="add_nutrition_fact_food_name">Food Name</string>
+    <string name="add_nutrition_fact_weight">Weight</string>
+    <string name="add_nutrition_fact_units">g</string>
+
 </resources>
