@@ -29,5 +29,9 @@
     <string name="add_nutrition_fact_food_name">Food Name</string>
     <string name="add_nutrition_fact_weight">Weight</string>
     <string name="add_nutrition_fact_units">g</string>
+    <string name="add_nutrition_fact_calories">Calories</string>
+    <string name="add_nutrition_fact_protein">Protein</string>
+    <string name="add_nutrition_fact_carb">Carbohydrate</string>
+    <string name="add_nutrition_fact_fat">Fat</string>
 
 </resources>
