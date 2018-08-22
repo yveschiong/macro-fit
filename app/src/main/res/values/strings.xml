@@ -33,5 +33,6 @@
     <string name="add_nutrition_fact_protein">Protein</string>
     <string name="add_nutrition_fact_carb">Carbohydrate</string>
     <string name="add_nutrition_fact_fat">Fat</string>
+    <string name="add_nutrition_fact_button_text">Add Nutrition Fact</string>
 
 </resources>
