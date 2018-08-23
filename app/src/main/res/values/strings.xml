@@ -30,9 +30,10 @@
     <string name="add_nutrition_fact_weight">Weight</string>
     <string name="add_nutrition_fact_units">g</string>
     <string name="add_nutrition_fact_calories">Calories</string>
-    <string name="add_nutrition_fact_protein">Protein</string>
-    <string name="add_nutrition_fact_carb">Carbohydrate</string>
-    <string name="add_nutrition_fact_fat">Fat</string>
+    <string name="add_nutrition_fact_protein">Protein (g)</string>
+    <string name="add_nutrition_fact_carb">Carbohydrate (g)</string>
+    <string name="add_nutrition_fact_fat">Fat (g)</string>
     <string name="add_nutrition_fact_button_text">Add Nutrition Fact</string>
+    <string name="add_nutrition_fact_error_text">Sorry, the nutrition fact couldn\'t be added. Please try again.</string>
 
 </resources>
