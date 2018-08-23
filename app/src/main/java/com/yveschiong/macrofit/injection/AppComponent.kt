@@ -2,6 +2,8 @@ package com.yveschiong.macrofit.injection
 
 import android.content.Context
 import com.yveschiong.macrofit.bus.EventBus
+import com.yveschiong.macrofit.fragments.FoodFragment
+import com.yveschiong.macrofit.fragments.NutritionFactsFragment
 import com.yveschiong.macrofit.repositories.FoodRepository
 import com.yveschiong.macrofit.repositories.NutritionFactsRepository
 import dagger.Component
@@ -14,4 +16,7 @@ interface AppComponent {
     val bus: EventBus
     val foodRepository: FoodRepository
     val nutritionFactsRepository: NutritionFactsRepository
+
+    fun inject(fragment: FoodFragment)
+    fun inject(fragment: NutritionFactsFragment)
 }

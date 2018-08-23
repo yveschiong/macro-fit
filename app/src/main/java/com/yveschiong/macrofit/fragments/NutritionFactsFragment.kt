@@ -1,7 +1,6 @@
 package com.yveschiong.macrofit.fragments
 
 import android.os.Bundle
-import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
@@ -9,18 +8,18 @@ import android.view.ViewGroup
 import com.yveschiong.macrofit.App
 import com.yveschiong.macrofit.R
 import com.yveschiong.macrofit.adapters.NutritionFactsListAdapter
+import com.yveschiong.macrofit.contracts.NutritionViewContract
 import com.yveschiong.macrofit.extensions.afterMeasured
-import com.yveschiong.macrofit.presenters.NutritionFactsListPresenter
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.schedulers.Schedulers
+import com.yveschiong.macrofit.models.NutritionFact
 import kotlinx.android.synthetic.main.fragment_food.view.*
+import javax.inject.Inject
 
-class NutritionFactsFragment: Fragment() {
+class NutritionFactsFragment: BaseFragment(), NutritionViewContract.View {
 
-    private var disposable = CompositeDisposable()
+    @Inject
+    lateinit var presenter: NutritionViewContract.Presenter<NutritionViewContract.View>
 
-    private var adapter: NutritionFactsListAdapter? = null
+    private var adapter: NutritionFactsListAdapter = NutritionFactsListAdapter(ArrayList())
 
     companion object {
         fun newInstance(): NutritionFactsFragment {
@@ -34,27 +33,27 @@ class NutritionFactsFragment: Fragment() {
         view.afterMeasured { view.recyclerView.setEmptyView(emptyView) }
         view.recyclerView.layoutManager = LinearLayoutManager(context)
         view.recyclerView.isNestedScrollingEnabled = false
+        view.recyclerView.adapter = adapter
 
-        disposable.add(App.graph.nutritionFactsRepository.getNutritionFacts()
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe {
-                adapter = NutritionFactsListAdapter(NutritionFactsListPresenter(it))
-                view.recyclerView.adapter = adapter
-                adapter?.notifyDataSetChanged()
-            })
+        App.graph.inject(this)
+
+        presenter.fetchNutrition()
 
         return view
     }
 
     override fun onResume() {
         super.onResume()
+        presenter.start(this)
     }
 
     override fun onPause() {
         super.onPause()
+        presenter.end()
+    }
 
-        // Unregister from event bus
-        disposable.clear()
+    override fun showNutrition(nutritionList: List<NutritionFact>) {
+        adapter.setData(nutritionList)
+        adapter.notifyDataSetChanged()
     }
 }

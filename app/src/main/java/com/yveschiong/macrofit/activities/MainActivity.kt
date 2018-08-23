@@ -1,5 +1,7 @@
 package com.yveschiong.macrofit.activities
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.NavigationView
 import android.support.v4.app.Fragment
@@ -13,10 +15,7 @@ import com.yveschiong.easycalendar.views.MonthView
 import com.yveschiong.macrofit.App
 import com.yveschiong.macrofit.R
 import com.yveschiong.macrofit.bus.events.DateEvents
-import com.yveschiong.macrofit.extensions.getNormalString
-import com.yveschiong.macrofit.extensions.isExpanded
-import com.yveschiong.macrofit.extensions.launchActivity
-import com.yveschiong.macrofit.extensions.replaceFragment
+import com.yveschiong.macrofit.extensions.*
 import com.yveschiong.macrofit.fragments.FoodFragment
 import com.yveschiong.macrofit.fragments.NutritionFactsFragment
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -26,7 +25,10 @@ import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
 import java.util.*
 
-class MainActivity: BaseActivity(), NavigationView.OnNavigationItemSelectedListener {
+class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedListener {
+
+    val REQUEST_CODE_ADD_NUTRITION_FACT = 1
+    val RESULT_KEY = "result_key"
 
     private var disposable = CompositeDisposable()
 
@@ -58,12 +60,12 @@ class MainActivity: BaseActivity(), NavigationView.OnNavigationItemSelectedListe
 
         fab.setOnClickListener {
             // When the fab is clicked, launch the appropriate activity
-            when(supportFragmentManager.findFragmentById(R.id.fragment).tag?.toInt()) {
+            when (supportFragmentManager.findFragmentById(R.id.fragment).tag?.toInt()) {
                 R.id.nav_food -> {
                     launchActivity(AddFoodActivity::class.java)
                 }
                 R.id.nav_nutrition_facts -> {
-                    launchActivity(AddNutritionFactActivity::class.java)
+                    launchActivityForResult(AddNutritionFactActivity::class.java, REQUEST_CODE_ADD_NUTRITION_FACT)
                 }
             }
         }
@@ -75,7 +77,7 @@ class MainActivity: BaseActivity(), NavigationView.OnNavigationItemSelectedListe
         }
 
         // Control the chevron clicks on the month view
-        monthView.onChevronSelectedListener = object: MonthView.OnChevronSelectedListener {
+        monthView.onChevronSelectedListener = object : MonthView.OnChevronSelectedListener {
             override fun onLeftChevronSelected() {
                 // Set the month to a month earlier
                 val month = monthView.month.start
@@ -92,16 +94,31 @@ class MainActivity: BaseActivity(), NavigationView.OnNavigationItemSelectedListe
         }
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        when (requestCode) {
+            REQUEST_CODE_ADD_NUTRITION_FACT -> {
+                when (resultCode) {
+                    Activity.RESULT_OK -> {
+                        // Do nothing for now
+                    }
+                    else -> {
+                        makeSnackbar(fab, getString(R.string.add_nutrition_fact_error_text))
+                    }
+                }
+            }
+        }
+    }
+
     override fun onResume() {
         super.onResume()
 
         // Register to event bus for switched date events
         disposable.add(App.graph.bus.listen<DateEvents.SwitchedDateEvent>()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe {
-                    titleText.text = it.switchedDate.time.getNormalString()
-                })
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe {
+                titleText.text = it.switchedDate.time.getNormalString()
+            })
     }
 
     override fun onPause() {

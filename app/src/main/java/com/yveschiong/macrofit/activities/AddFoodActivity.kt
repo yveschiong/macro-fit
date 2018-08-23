@@ -7,7 +7,7 @@ import com.yveschiong.macrofit.models.Food
 import com.yveschiong.macrofit.models.Weight
 import java.util.*
 
-class AddFoodActivity: BaseActivity() {
+class AddFoodActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_food)

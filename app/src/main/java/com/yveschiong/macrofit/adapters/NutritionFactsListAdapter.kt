@@ -4,20 +4,31 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.yveschiong.macrofit.R
-import com.yveschiong.macrofit.presenters.NutritionFactsListPresenter
+import com.yveschiong.macrofit.models.NutritionFact
 import com.yveschiong.macrofit.viewholders.NutritionFactsListViewHolder
 
-class NutritionFactsListAdapter(var presenter: NutritionFactsListPresenter?) : RecyclerView.Adapter<NutritionFactsListViewHolder>() {
+class NutritionFactsListAdapter(private var nutritionFactsList: List<NutritionFact>) : RecyclerView.Adapter<NutritionFactsListViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NutritionFactsListViewHolder {
         return NutritionFactsListViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.list_item_nutrition_fact, parent, false))
     }
 
     override fun onBindViewHolder(holder: NutritionFactsListViewHolder, position: Int) {
-        presenter?.populate(holder, position)
+        with(nutritionFactsList[position]) {
+            holder.foodNameTextView.text = name
+            holder.amountTextView.text = holder.itemView.context.getString(R.string.food_amount_text, amount, unit)
+            holder.caloriesTextView.text = holder.itemView.context.getString(R.string.calories_text, calories)
+            holder.proteinTextView.text = holder.itemView.context.getString(R.string.protein_text, protein)
+            holder.carbsTextView.text = holder.itemView.context.getString(R.string.carbs_text, carbs)
+            holder.fatTextView.text = holder.itemView.context.getString(R.string.fat_text, fat)
+        }
     }
 
     override fun getItemCount(): Int {
-        return presenter?.getItemCount() ?: 0
+        return nutritionFactsList.size
+    }
+
+    fun setData(nutritionFactsList: List<NutritionFact>) {
+        this.nutritionFactsList = nutritionFactsList
     }
 }
