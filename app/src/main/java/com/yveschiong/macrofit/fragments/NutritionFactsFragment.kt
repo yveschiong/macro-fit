@@ -37,19 +37,15 @@ class NutritionFactsFragment: BaseFragment(), NutritionViewContract.View {
 
         App.graph.inject(this)
 
+        presenter.onAttach(this)
         presenter.fetchNutrition()
 
         return view
     }
 
-    override fun onResume() {
-        super.onResume()
-        presenter.start(this)
-    }
-
-    override fun onPause() {
-        super.onPause()
-        presenter.end()
+    override fun onDestroyView() {
+        presenter.onDetach()
+        super.onDestroyView()
     }
 
     override fun showNutrition(nutritionList: List<NutritionFact>) {

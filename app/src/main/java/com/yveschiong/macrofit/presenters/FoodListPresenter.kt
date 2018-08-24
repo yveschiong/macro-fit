@@ -14,8 +14,8 @@ class FoodListPresenter<V: FoodViewContract.View> @Inject constructor(
     private val foodRepository: FoodRepository
 ) : RootPresenter<V>(), FoodViewContract.Presenter<V> {
 
-    override fun start(view: V) {
-        super.start(view)
+    override fun onAttach(view: V) {
+        super.onAttach(view)
 
         // Register to event bus for switched date events
         bus.listen<DateEvents.SwitchedDateEvent>()

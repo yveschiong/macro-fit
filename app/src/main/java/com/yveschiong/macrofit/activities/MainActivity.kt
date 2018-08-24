@@ -3,7 +3,6 @@ package com.yveschiong.macrofit.activities
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.support.design.widget.NavigationView
 import android.support.v4.app.Fragment
 import android.support.v4.view.GravityCompat
 import android.support.v7.app.ActionBarDrawerToggle
@@ -14,23 +13,22 @@ import android.view.View
 import com.yveschiong.easycalendar.views.MonthView
 import com.yveschiong.macrofit.App
 import com.yveschiong.macrofit.R
-import com.yveschiong.macrofit.bus.events.DateEvents
+import com.yveschiong.macrofit.contracts.MainViewContract
 import com.yveschiong.macrofit.extensions.*
 import com.yveschiong.macrofit.fragments.FoodFragment
 import com.yveschiong.macrofit.fragments.NutritionFactsFragment
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
 import java.util.*
+import javax.inject.Inject
 
-class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedListener {
+class MainActivity : BaseActivity(), MainViewContract.View {
 
     val REQUEST_CODE_ADD_NUTRITION_FACT = 1
     val RESULT_KEY = "result_key"
 
-    private var disposable = CompositeDisposable()
+    @Inject
+    lateinit var presenter: MainViewContract.Presenter<MainViewContract.View>
 
     private var fragments = SparseArray<Fragment>()
 
@@ -39,57 +37,52 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
 
-        val toggle = ActionBarDrawerToggle(this, drawer_layout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
+        App.graph.inject(this)
+
+        presenter.onAttach(this)
+
+        val toggle = ActionBarDrawerToggle(this, drawer_layout, toolbar,
+            R.string.navigation_drawer_open, R.string.navigation_drawer_close)
         drawer_layout.addDrawerListener(toggle)
         toggle.syncState()
 
-        nav_view.setNavigationItemSelectedListener(this)
+        nav_view.setNavigationItemSelectedListener {
+            // If the month view is showing then we want to hide it
+            if (appBarLayout.isExpanded()) {
+                toggleExpandedAppBar()
+            }
 
-        setMenuNavigation(R.id.nav_nutrition_facts)
+            presenter.setMenuNavigation(it.itemId)
+            drawer_layout.closeDrawer(GravityCompat.START)
+
+            true
+        }
+
+        presenter.setMenuNavigation(R.id.nav_nutrition_facts)
 
         // Expand and collapse the calendar/datepicker when clicked
         datePicker.setOnClickListener {
-            // Have to reset the month view month in case of selected date mismatch with the view
-            // and only do so when the date picker is opened from an unexpanded state
-            if (!appBarLayout.isExpanded()) {
-                monthView.setMonth(monthView.selectedDay)
-            }
-
-            toggleExpandedAppBar()
+            presenter.onCalendarIconSelected()
         }
 
         fab.setOnClickListener {
-            // When the fab is clicked, launch the appropriate activity
-            when (supportFragmentManager.findFragmentById(R.id.fragment).tag?.toInt()) {
-                R.id.nav_food -> {
-                    launchActivity(AddFoodActivity::class.java)
-                }
-                R.id.nav_nutrition_facts -> {
-                    launchActivityForResult(AddNutritionFactActivity::class.java, REQUEST_CODE_ADD_NUTRITION_FACT)
-                }
-            }
+            presenter.onFabClickedFrom(supportFragmentManager.findFragmentById(R.id.fragment).tag?.toInt())
         }
 
-        // Post a switched date event when the month view selects a different date
         monthView.onSelectedDayListener = MonthView.OnSelectedDayListener { day ->
-            toggleExpandedAppBar()
-            App.graph.bus.post(DateEvents.SwitchedDateEvent(day))
+            presenter.onMonthViewDaySelected(day)
         }
 
         // Control the chevron clicks on the month view
         monthView.onChevronSelectedListener = object : MonthView.OnChevronSelectedListener {
             override fun onLeftChevronSelected() {
                 // Set the month to a month earlier
-                val month = monthView.month.start
-                month.add(Calendar.MONTH, -1)
-                monthView.setMonth(month)
+                presenter.incrementMonthViewMonthBy(monthView.month.start, -1)
             }
 
             override fun onRightChevronSelected() {
                 // Set the month to a month later
-                val month = monthView.month.start
-                month.add(Calendar.MONTH, 1)
-                monthView.setMonth(month)
+                presenter.incrementMonthViewMonthBy(monthView.month.start, 1)
             }
         }
     }
@@ -109,27 +102,9 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         }
     }
 
-    override fun onResume() {
-        super.onResume()
-
-        // Register to event bus for switched date events
-        disposable.add(App.graph.bus.listen<DateEvents.SwitchedDateEvent>()
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe {
-                titleText.text = it.switchedDate.time.getNormalString()
-            })
-    }
-
-    override fun onPause() {
-        super.onPause()
-
-        // Unregister from event bus
-        disposable.clear()
-    }
-
-    fun toggleExpandedAppBar() {
-        appBarLayout.setExpanded(!appBarLayout.isExpanded())
+    override fun onDestroy() {
+        presenter.onDetach()
+        super.onDestroy()
     }
 
     override fun onBackPressed() {
@@ -156,41 +131,53 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         }
     }
 
-    override fun onNavigationItemSelected(item: MenuItem): Boolean {
-        // If the month view is showing then we want to hide it
-        if (appBarLayout.isExpanded()) {
-            toggleExpandedAppBar()
+    override fun toggleExpandedAppBar() {
+        appBarLayout.setExpanded(!appBarLayout.isExpanded())
+    }
+
+    override fun toggleCalendarExpansion() {
+        // Have to reset the month view month in case of selected date mismatch with the view
+        // and only do so when the date picker is opened from an unexpanded state
+        if (!appBarLayout.isExpanded()) {
+            monthView.setMonth(monthView.selectedDay)
         }
 
-        setMenuNavigation(item.itemId)
-        drawer_layout.closeDrawer(GravityCompat.START)
-        return true
+        toggleExpandedAppBar()
     }
 
-    fun setMenuNavigation(id: Int) {
+    override fun setMonthViewDay(day: Calendar) {
+        monthView.selectedDay = day
+    }
+
+    override fun setMonthViewMonth(month: Calendar) {
+        monthView.setMonth(month)
+    }
+
+    override fun setTitleText(text: String) {
+        titleText.text = text
+    }
+
+    override fun setNavViewCheckedItem(id: Int) {
         nav_view.setCheckedItem(id)
-        setActionBarState(id)
-        switchToFragment(id)
     }
 
-    fun setActionBarState(id: Int) {
+    override fun setActionBarState(id: Int) {
         datePicker.visibility = View.GONE
         when (id) {
             R.id.nav_food -> {
                 datePicker.visibility = View.VISIBLE
 
                 // Reset the month view to today
-                monthView.selectedDay = Calendar.getInstance()
-                titleText.text = monthView.selectedDay.time.getNormalString()
+                presenter.changeMonthViewSelectedDay(Calendar.getInstance())
             }
             R.id.nav_nutrition_facts -> {
-                titleText.text = getString(R.string.nutrition_facts)
+                setTitleText(getString(R.string.nutrition_facts))
             }
             else -> return
         }
     }
 
-    fun switchToFragment(id: Int) {
+    override fun switchToFragment(id: Int) {
         if (fragments.indexOfKey(id) < 0) {
             when (id) {
                 R.id.nav_food -> {
@@ -204,5 +191,17 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         }
 
         replaceFragment(R.id.fragment, fragments[id]!!, id.toString())
+    }
+
+    override fun showActivity(id: Int?) {
+        // When the fab is clicked, launch the appropriate activity
+        when (id) {
+            R.id.nav_food -> {
+                launchActivity(AddFoodActivity::class.java)
+            }
+            R.id.nav_nutrition_facts -> {
+                launchActivityForResult(AddNutritionFactActivity::class.java, REQUEST_CODE_ADD_NUTRITION_FACT)
+            }
+        }
     }
 }

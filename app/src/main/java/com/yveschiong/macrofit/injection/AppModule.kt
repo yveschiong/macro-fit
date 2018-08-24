@@ -3,11 +3,13 @@ package com.yveschiong.macrofit.injection
 import android.content.Context
 import com.yveschiong.macrofit.bus.EventBus
 import com.yveschiong.macrofit.contracts.FoodViewContract
+import com.yveschiong.macrofit.contracts.MainViewContract
 import com.yveschiong.macrofit.contracts.NutritionViewContract
 import com.yveschiong.macrofit.database.AppDatabase
 import com.yveschiong.macrofit.database.daos.FoodDao
 import com.yveschiong.macrofit.database.daos.NutritionFactsDao
 import com.yveschiong.macrofit.presenters.FoodListPresenter
+import com.yveschiong.macrofit.presenters.MainPresenter
 import com.yveschiong.macrofit.presenters.NutritionFactsListPresenter
 import com.yveschiong.macrofit.repositories.FoodRepository
 import com.yveschiong.macrofit.repositories.NutritionFactsRepository
@@ -57,6 +59,13 @@ class AppModule(private val context: Context) {
     @Singleton
     fun provideNutritionFactsRepository(nutritionFactsDao: NutritionFactsDao): NutritionFactsRepository {
         return NutritionFactsRepository(nutritionFactsDao)
+    }
+
+    @Provides
+    @Singleton
+    fun provideMainPresenter(presenter: MainPresenter<MainViewContract.View>):
+        MainViewContract.Presenter<MainViewContract.View> {
+        return presenter
     }
 
     @Provides

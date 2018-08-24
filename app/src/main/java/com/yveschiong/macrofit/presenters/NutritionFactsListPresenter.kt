@@ -10,12 +10,6 @@ class NutritionFactsListPresenter<V : NutritionViewContract.View> @Inject constr
     private val nutritionFactsRepository: NutritionFactsRepository
 ) : RootPresenter<V>(), NutritionViewContract.Presenter<V> {
 
-    override fun start(view: V) {
-        super.start(view)
-
-        // Do nothing for now
-    }
-
     override fun fetchNutrition() {
         nutritionFactsRepository.getNutritionFacts()
             .subscribeOn(Schedulers.io())
