@@ -1,14 +1,14 @@
 package com.yveschiong.macrofit.presenters
 
-import com.yveschiong.macrofit.contracts.NutritionViewContract
+import com.yveschiong.macrofit.contracts.NutritionFactsViewContract
 import com.yveschiong.macrofit.repositories.NutritionFactsRepository
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
-class NutritionFactsListPresenter<V : NutritionViewContract.View> @Inject constructor(
+class NutritionFactsListPresenter<V : NutritionFactsViewContract.View> @Inject constructor(
     private val nutritionFactsRepository: NutritionFactsRepository
-) : RootPresenter<V>(), NutritionViewContract.Presenter<V> {
+) : RootPresenter<V>(), NutritionFactsViewContract.Presenter<V> {
 
     override fun fetchNutrition() {
         nutritionFactsRepository.getNutritionFacts()

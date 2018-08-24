@@ -2,12 +2,14 @@ package com.yveschiong.macrofit.injection
 
 import android.content.Context
 import com.yveschiong.macrofit.bus.EventBus
+import com.yveschiong.macrofit.contracts.AddNutritionFactViewContract
 import com.yveschiong.macrofit.contracts.FoodViewContract
 import com.yveschiong.macrofit.contracts.MainViewContract
-import com.yveschiong.macrofit.contracts.NutritionViewContract
+import com.yveschiong.macrofit.contracts.NutritionFactsViewContract
 import com.yveschiong.macrofit.database.AppDatabase
 import com.yveschiong.macrofit.database.daos.FoodDao
 import com.yveschiong.macrofit.database.daos.NutritionFactsDao
+import com.yveschiong.macrofit.presenters.AddNutritionFactPresenter
 import com.yveschiong.macrofit.presenters.FoodListPresenter
 import com.yveschiong.macrofit.presenters.MainPresenter
 import com.yveschiong.macrofit.presenters.NutritionFactsListPresenter
@@ -70,6 +72,13 @@ class AppModule(private val context: Context) {
 
     @Provides
     @Singleton
+    fun provideAddNutritionFactPresenter(presenter: AddNutritionFactPresenter<AddNutritionFactViewContract.View>):
+        AddNutritionFactViewContract.Presenter<AddNutritionFactViewContract.View> {
+        return presenter
+    }
+
+    @Provides
+    @Singleton
     fun provideFoodListPresenter(presenter: FoodListPresenter<FoodViewContract.View>):
         FoodViewContract.Presenter<FoodViewContract.View> {
         return presenter
@@ -77,8 +86,8 @@ class AppModule(private val context: Context) {
 
     @Provides
     @Singleton
-    fun provideNutritionFactsListPresenter(presenter: NutritionFactsListPresenter<NutritionViewContract.View>):
-        NutritionViewContract.Presenter<NutritionViewContract.View> {
+    fun provideNutritionFactsListPresenter(presenter: NutritionFactsListPresenter<NutritionFactsViewContract.View>):
+        NutritionFactsViewContract.Presenter<NutritionFactsViewContract.View> {
         return presenter
     }
 }

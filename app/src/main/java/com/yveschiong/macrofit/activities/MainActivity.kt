@@ -58,7 +58,13 @@ class MainActivity : BaseActivity(), MainViewContract.View {
             true
         }
 
-        presenter.setMenuNavigation(R.id.nav_nutrition_facts)
+        // We only want to set this on first entry of the activity
+        if (savedInstanceState == null) {
+            presenter.setMenuNavigation(R.id.nav_nutrition_facts)
+        } else {
+            // We still would need to set the other data relating to the action bar state
+            getCurrentNavId()?.let { setActionBarState(it) }
+        }
 
         // Expand and collapse the calendar/datepicker when clicked
         datePicker.setOnClickListener {
@@ -66,7 +72,7 @@ class MainActivity : BaseActivity(), MainViewContract.View {
         }
 
         fab.setOnClickListener {
-            presenter.onFabClickedFrom(supportFragmentManager.findFragmentById(R.id.fragment).tag?.toInt())
+            presenter.onFabClickedFrom(getCurrentNavId())
         }
 
         monthView.onSelectedDayListener = MonthView.OnSelectedDayListener { day ->
@@ -203,5 +209,9 @@ class MainActivity : BaseActivity(), MainViewContract.View {
                 launchActivityForResult(AddNutritionFactActivity::class.java, REQUEST_CODE_ADD_NUTRITION_FACT)
             }
         }
+    }
+
+    private fun getCurrentNavId(): Int? {
+        return supportFragmentManager.findFragmentById(R.id.fragment).tag?.toInt()
     }
 }

@@ -4,7 +4,7 @@ import com.yveschiong.macrofit.interfaces.BasePresenter
 import com.yveschiong.macrofit.interfaces.BaseView
 import com.yveschiong.macrofit.models.NutritionFact
 
-interface NutritionViewContract {
+interface NutritionFactsViewContract {
     interface View : BaseView {
         fun showNutrition(nutritionList: List<NutritionFact>)
     }

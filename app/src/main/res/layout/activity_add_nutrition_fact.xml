@@ -2,154 +2,174 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:focusableInTouchMode="true">
+    android:layout_height="match_parent">
 
-    <android.support.design.widget.TextInputLayout
-        android:id="@+id/nameLayout"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
-        android:paddingTop="10dp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/add_button">
 
-        <android.support.design.widget.TextInputEditText
-            android:id="@+id/name"
+        <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/add_nutrition_fact_food_name" />
+            android:focusableInTouchMode="true">
 
-    </android.support.design.widget.TextInputLayout>
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/nameLayout"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:paddingLeft="@dimen/add_nutrition_fact_page_padding"
+                android:paddingRight="@dimen/add_nutrition_fact_page_padding"
+                android:paddingTop="@dimen/add_nutrition_fact_page_padding"
+                app:errorEnabled="true"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent">
 
-    <android.support.design.widget.TextInputLayout
-        android:id="@+id/weightLayout"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
-        android:paddingTop="10dp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toLeftOf="@+id/unitsLayout"
-        app:layout_constraintTop_toBottomOf="@+id/nameLayout">
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/add_nutrition_fact_food_name" />
 
-        <android.support.design.widget.TextInputEditText
-            android:id="@+id/weight"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/add_nutrition_fact_weight"
-            android:inputType="numberDecimal" />
+            </android.support.design.widget.TextInputLayout>
 
-    </android.support.design.widget.TextInputLayout>
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/weightLayout"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:paddingLeft="@dimen/add_nutrition_fact_page_padding"
+                android:paddingRight="@dimen/add_nutrition_fact_page_padding"
+                android:paddingTop="@dimen/add_nutrition_fact_page_padding"
+                app:errorEnabled="true"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toLeftOf="@+id/unitsLayout"
+                app:layout_constraintTop_toBottomOf="@+id/nameLayout">
 
-    <android.support.design.widget.TextInputLayout
-        android:id="@+id/unitsLayout"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
-        android:paddingTop="10dp"
-        app:layout_constraintLeft_toRightOf="@id/weightLayout"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/nameLayout"
-        app:layout_constraintWidth_default="percent"
-        app:layout_constraintWidth_percent="0.2">
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/weight"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/add_nutrition_fact_weight"
+                    android:inputType="numberDecimal" />
 
-        <android.support.design.widget.TextInputEditText
-            android:id="@+id/units"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/add_nutrition_fact_units" />
+            </android.support.design.widget.TextInputLayout>
 
-    </android.support.design.widget.TextInputLayout>
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/unitsLayout"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:paddingLeft="@dimen/add_nutrition_fact_page_padding"
+                android:paddingRight="@dimen/add_nutrition_fact_page_padding"
+                android:paddingTop="@dimen/add_nutrition_fact_page_padding"
+                app:layout_constraintLeft_toRightOf="@id/weightLayout"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/nameLayout"
+                app:layout_constraintWidth_default="percent"
+                app:layout_constraintWidth_percent="0.2">
 
-    <android.support.design.widget.TextInputLayout
-        android:id="@+id/caloriesLayout"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
-        android:paddingTop="10dp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/weightLayout">
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/units"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/add_nutrition_fact_units" />
 
-        <android.support.design.widget.TextInputEditText
-            android:id="@+id/calories"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/add_nutrition_fact_calories"
-            android:inputType="numberDecimal" />
+            </android.support.design.widget.TextInputLayout>
 
-    </android.support.design.widget.TextInputLayout>
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/caloriesLayout"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:paddingLeft="@dimen/add_nutrition_fact_page_padding"
+                android:paddingRight="@dimen/add_nutrition_fact_page_padding"
+                android:paddingTop="@dimen/add_nutrition_fact_page_padding"
+                app:errorEnabled="true"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/weightLayout">
 
-    <android.support.design.widget.TextInputLayout
-        android:id="@+id/proteinLayout"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
-        android:paddingTop="10dp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/caloriesLayout">
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/calories"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/add_nutrition_fact_calories"
+                    android:inputType="numberDecimal" />
 
-        <android.support.design.widget.TextInputEditText
-            android:id="@+id/protein"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/add_nutrition_fact_protein"
-            android:inputType="numberDecimal" />
+            </android.support.design.widget.TextInputLayout>
 
-    </android.support.design.widget.TextInputLayout>
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/proteinLayout"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:paddingLeft="@dimen/add_nutrition_fact_page_padding"
+                android:paddingRight="@dimen/add_nutrition_fact_page_padding"
+                android:paddingTop="@dimen/add_nutrition_fact_page_padding"
+                app:errorEnabled="true"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/caloriesLayout">
 
-    <android.support.design.widget.TextInputLayout
-        android:id="@+id/carbLayout"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
-        android:paddingTop="10dp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/proteinLayout">
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/protein"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/add_nutrition_fact_protein"
+                    android:inputType="numberDecimal" />
 
-        <android.support.design.widget.TextInputEditText
-            android:id="@+id/carb"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/add_nutrition_fact_carb"
-            android:inputType="numberDecimal" />
+            </android.support.design.widget.TextInputLayout>
 
-    </android.support.design.widget.TextInputLayout>
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/carbLayout"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:paddingLeft="@dimen/add_nutrition_fact_page_padding"
+                android:paddingRight="@dimen/add_nutrition_fact_page_padding"
+                android:paddingTop="@dimen/add_nutrition_fact_page_padding"
+                app:errorEnabled="true"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/proteinLayout">
 
-    <android.support.design.widget.TextInputLayout
-        android:id="@+id/fatLayout"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
-        android:paddingTop="10dp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/carbLayout">
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/carb"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/add_nutrition_fact_carb"
+                    android:inputType="numberDecimal" />
 
-        <android.support.design.widget.TextInputEditText
-            android:id="@+id/fat"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/add_nutrition_fact_fat"
-            android:inputType="numberDecimal" />
+            </android.support.design.widget.TextInputLayout>
 
-    </android.support.design.widget.TextInputLayout>
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/fatLayout"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:paddingLeft="@dimen/add_nutrition_fact_page_padding"
+                android:paddingRight="@dimen/add_nutrition_fact_page_padding"
+                android:paddingTop="@dimen/add_nutrition_fact_page_padding"
+                app:errorEnabled="true"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/carbLayout">
+
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/fat"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/add_nutrition_fact_fat"
+                    android:inputType="numberDecimal" />
+
+            </android.support.design.widget.TextInputLayout>
+
+        </android.support.constraint.ConstraintLayout>
+
+    </ScrollView>
 
     <Button
         android:id="@+id/add_button"
         style="@style/Widget.AppCompat.Button.Colored"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp"
+        android:layout_margin="@dimen/add_nutrition_fact_page_padding"
         android:text="@string/add_nutrition_fact_button_text"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
