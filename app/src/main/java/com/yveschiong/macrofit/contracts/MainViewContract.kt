@@ -2,6 +2,7 @@ package com.yveschiong.macrofit.contracts
 
 import com.yveschiong.macrofit.interfaces.BasePresenter
 import com.yveschiong.macrofit.interfaces.BaseView
+import com.yveschiong.macrofit.models.NutritionFact
 import java.util.*
 
 interface MainViewContract {
@@ -24,5 +25,6 @@ interface MainViewContract {
         fun incrementMonthViewMonthBy(month: Calendar, increment: Int)
         fun onMonthViewDaySelected(day: Calendar)
         fun onFabClickedFrom(id: Int?)
+        fun addNutritionFact(nutritionFact: NutritionFact)
     }
 }

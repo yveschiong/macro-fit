@@ -13,6 +13,8 @@ import android.view.View
 import com.yveschiong.easycalendar.views.MonthView
 import com.yveschiong.macrofit.App
 import com.yveschiong.macrofit.R
+import com.yveschiong.macrofit.constants.Constants
+import com.yveschiong.macrofit.constants.Constants.REQUEST_CODE_ADD_NUTRITION_FACT
 import com.yveschiong.macrofit.contracts.MainViewContract
 import com.yveschiong.macrofit.extensions.isExpanded
 import com.yveschiong.macrofit.extensions.launchActivity
@@ -27,9 +29,6 @@ import java.util.*
 import javax.inject.Inject
 
 class MainActivity : BaseActivity(), MainViewContract.View {
-
-    val REQUEST_CODE_ADD_NUTRITION_FACT = 1
-    val RESULT_KEY = "result_key"
 
     @Inject
     lateinit var presenter: MainViewContract.Presenter<MainViewContract.View>
@@ -99,10 +98,10 @@ class MainActivity : BaseActivity(), MainViewContract.View {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         when (requestCode) {
-            REQUEST_CODE_ADD_NUTRITION_FACT -> {
-                when (resultCode) {
-                    Activity.RESULT_OK -> {
-                        val nutritionFact = data?.getParcelableExtra<NutritionFact>(RESULT_KEY)
+            Constants.REQUEST_CODE_ADD_NUTRITION_FACT -> {
+                if (resultCode == Activity.RESULT_OK) {
+                    data?.getParcelableExtra<NutritionFact>(Constants.RESULT_KEY)?.let {
+                        presenter.addNutritionFact(it)
                     }
                 }
             }
