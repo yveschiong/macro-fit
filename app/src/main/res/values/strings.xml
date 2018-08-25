@@ -35,4 +35,6 @@
     <string name="add_nutrition_fact_fat">Fat (g)</string>
     <string name="add_nutrition_fact_button_text">Add Nutrition Fact</string>
 
+    <string name="add_nutrition_fact_required_error_text">This field is required.</string>
+
 </resources>
