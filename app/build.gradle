@@ -2,8 +2,12 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
+apply plugin: 'org.jetbrains.kotlin.android.extensions'
 
 android {
+    androidExtensions {
+        experimental = true
+    }
     compileSdkVersion 27
     defaultConfig {
         applicationId "com.yveschiong.macrofit"

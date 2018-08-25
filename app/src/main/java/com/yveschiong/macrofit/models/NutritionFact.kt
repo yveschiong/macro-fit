@@ -3,7 +3,10 @@ package com.yveschiong.macrofit.models
 import android.arch.persistence.room.ColumnInfo
 import android.arch.persistence.room.Entity
 import android.arch.persistence.room.PrimaryKey
+import android.os.Parcelable
+import kotlinx.android.parcel.Parcelize
 
+@Parcelize
 @Entity(tableName = "nutrition_facts")
 data class NutritionFact(
     @ColumnInfo(name = "name")
@@ -12,8 +15,8 @@ data class NutritionFact(
     @ColumnInfo(name = "amount")
     var amount: Float,
 
-    @ColumnInfo(name = "unit")
     @Weight.Unit
+    @ColumnInfo(name = "unit")
     var unit: String,
 
     @ColumnInfo(name = "calories")
@@ -26,9 +29,9 @@ data class NutritionFact(
     var carbs: Float,
 
     @ColumnInfo(name = "fat")
-    var fat: Float
-) {
+    var fat: Float,
+
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id")
     var id: Int = 0
-}
+) : Parcelable

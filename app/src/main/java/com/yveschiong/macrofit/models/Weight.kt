@@ -12,5 +12,7 @@ class Weight {
     companion object {
         const val GRAMS = "g"
         const val PIECES = "pcs"
+
+        val UNITS = arrayOf(GRAMS, PIECES)
     }
 }
