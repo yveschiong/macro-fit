@@ -37,4 +37,7 @@
 
     <string name="add_nutrition_fact_required_error_text">This field is required.</string>
 
+    <string name="add_food_choose_nutrition_fact">Choose a nutrition fact:</string>
+    <string name="add_food_button_text">Add Food</string>
+
 </resources>

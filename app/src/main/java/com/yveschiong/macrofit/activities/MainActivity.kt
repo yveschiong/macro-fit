@@ -63,7 +63,7 @@ class MainActivity : BaseActivity(), MainViewContract.View {
 
         // We only want to set this on first entry of the activity
         if (savedInstanceState == null) {
-            presenter.setMenuNavigation(R.id.nav_nutrition_facts)
+            presenter.setMenuNavigation(R.id.nav_food)
         } else {
             // We still would need to set the other data relating to the action bar state
             getCurrentNavId()?.let { setActionBarState(it) }

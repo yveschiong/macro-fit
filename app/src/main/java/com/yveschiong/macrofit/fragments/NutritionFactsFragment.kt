@@ -7,7 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.yveschiong.macrofit.App
 import com.yveschiong.macrofit.R
-import com.yveschiong.macrofit.adapters.NutritionFactsListAdapter
+import com.yveschiong.macrofit.adapters.recyclerview.NutritionFactsListAdapter
 import com.yveschiong.macrofit.contracts.NutritionFactsViewContract
 import com.yveschiong.macrofit.extensions.afterMeasured
 import com.yveschiong.macrofit.models.NutritionFact

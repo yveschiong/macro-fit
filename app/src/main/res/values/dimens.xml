@@ -8,5 +8,10 @@
 
     <dimen name="date_picker_calendar_height">275dp</dimen>
 
+    <dimen name="card_food_horizontal_margins">6dp</dimen>
+    <dimen name="card_food_vertical_margins">1dp</dimen>
+    <dimen name="card_food_inner_margins">10dp</dimen>
+
     <dimen name="add_nutrition_fact_page_padding">5dp</dimen>
+    <dimen name="add_food_page_padding">5dp</dimen>
 </resources>

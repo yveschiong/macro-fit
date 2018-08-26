@@ -4,15 +4,18 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="10dp"
+    android:layout_marginBottom="@dimen/card_food_vertical_margins"
+    android:layout_marginLeft="@dimen/card_food_horizontal_margins"
+    android:layout_marginRight="@dimen/card_food_horizontal_margins"
     android:clickable="true"
     android:focusable="true"
-    android:foreground="?attr/selectableItemBackground">
+    android:foreground="?attr/selectableItemBackground"
+    app:cardUseCompatPadding="true">
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp">
+        android:layout_margin="@dimen/card_food_inner_margins">
 
         <TextView
             android:id="@+id/name"
@@ -69,13 +72,24 @@
             app:layout_constraintTop_toBottomOf="@+id/carbs"
             tools:text="Fat: 80g" />
 
-        <ImageView
-            android:id="@+id/edit"
+        <!-- We need to wrap the image view in a frame layout so we can get the ripple click effect -->
+        <FrameLayout
+            android:id="@+id/editWrapper"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="?attr/selectableItemBackground"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:srcCompat="@drawable/ic_edit" />
+            app:layout_constraintRight_toRightOf="parent">
+
+            <ImageView
+                android:id="@+id/edit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:srcCompat="@drawable/ic_edit" />
+
+        </FrameLayout>
 
     </android.support.constraint.ConstraintLayout>
 

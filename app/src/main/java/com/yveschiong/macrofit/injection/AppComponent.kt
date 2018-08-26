@@ -1,6 +1,7 @@
 package com.yveschiong.macrofit.injection
 
 import android.content.Context
+import com.yveschiong.macrofit.activities.AddFoodActivity
 import com.yveschiong.macrofit.activities.AddNutritionFactActivity
 import com.yveschiong.macrofit.activities.MainActivity
 import com.yveschiong.macrofit.bus.EventBus
@@ -21,6 +22,7 @@ interface AppComponent {
 
     fun inject(activity: MainActivity)
     fun inject(activity: AddNutritionFactActivity)
+    fun inject(activity: AddFoodActivity)
     fun inject(fragment: FoodFragment)
     fun inject(fragment: NutritionFactsFragment)
 }

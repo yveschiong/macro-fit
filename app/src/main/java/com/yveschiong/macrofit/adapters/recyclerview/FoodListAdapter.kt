@@ -1,4 +1,4 @@
-package com.yveschiong.macrofit.adapters
+package com.yveschiong.macrofit.adapters.recyclerview
 
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater

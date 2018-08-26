@@ -3,6 +3,7 @@ import android.app.Application
 import com.yveschiong.macrofit.injection.AppComponent
 import com.yveschiong.macrofit.injection.AppModule
 import com.yveschiong.macrofit.injection.DaggerAppComponent
+import com.yveschiong.macrofit.templates.DatabaseTemplates
 
 class App : Application() {
 
@@ -17,5 +18,8 @@ class App : Application() {
         graph = DaggerAppComponent.builder()
                 .appModule(AppModule(this))
                 .build()
+
+        // Used only for helping in development and not for actual release
+        DatabaseTemplates.setupBasicNutritionFacts()
     }
 }
