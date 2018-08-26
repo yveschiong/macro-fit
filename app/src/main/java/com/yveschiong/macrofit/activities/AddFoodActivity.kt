@@ -1,5 +1,7 @@
 package com.yveschiong.macrofit.activities
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -8,11 +10,14 @@ import android.widget.AdapterView
 import com.yveschiong.macrofit.App
 import com.yveschiong.macrofit.R
 import com.yveschiong.macrofit.adapters.array.NutritionFactsSpinner
+import com.yveschiong.macrofit.constants.Constants
+import com.yveschiong.macrofit.constants.ResponseCode
 import com.yveschiong.macrofit.contracts.AddFoodViewContract
 import com.yveschiong.macrofit.models.NutritionFact
 import com.yveschiong.macrofit.models.Weight
 import kotlinx.android.synthetic.main.activity_add_food.*
 import kotlinx.android.synthetic.main.list_item_food.*
+import java.util.*
 import javax.inject.Inject
 
 class AddFoodActivity : BaseActivity(), AddFoodViewContract.View {
@@ -61,9 +66,31 @@ class AddFoodActivity : BaseActivity(), AddFoodViewContract.View {
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                setWeight((s ?: "").toString())
+                setWeight((s ?: "").toString().toFloatOrNull()?.toString())
             }
         })
+
+        add_button.setOnClickListener {
+            val weightText = weight.text.toString()
+            val isWeightValid = presenter.validateWeight(weightText)
+
+            if (isWeightValid) {
+                // Validated the fields so we can create a new food
+                val result = Intent()
+                nutritionFactSpinner.selectedItem.let {
+                    if (it is NutritionFact) {
+                        // Setup a result food object
+                        result.putExtra(Constants.RESULT_KEY,
+                            presenter.createFood(
+                                intent.getLongExtra(Constants.EXTRA_DAY_TIMESTAMP, Date().time),
+                                it, weightText.toFloat()))
+                    }
+                }
+
+                setResult(Activity.RESULT_OK, result)
+                finish()
+            }
+        }
     }
 
     override fun onDestroy() {
@@ -106,6 +133,20 @@ class AddFoodActivity : BaseActivity(), AddFoodViewContract.View {
 
     override fun setUnitText(text: String) {
         unitText.text = text
+    }
+
+    override fun tryShowWeightErrorMessage(code: Int) {
+        when (code) {
+            ResponseCode.FIELD_IS_REQUIRED -> {
+                weightLayout.error = getString(R.string.field_required_error_text)
+            }
+            ResponseCode.FIELD_IS_INVALID -> {
+                weightLayout.error = getString(R.string.field_invalid_error_text)
+            }
+            ResponseCode.OK -> {
+                weightLayout.error = null
+            }
+        }
     }
 
     override fun setCardData(name: String,

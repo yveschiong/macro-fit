@@ -12,7 +12,7 @@ interface FoodDao {
     @Query("SELECT * FROM food")
     fun getFood(): Single<List<Food>>
 
-    @Query("SELECT * FROM food WHERE time_added BETWEEN :from AND :to")
+    @Query("SELECT * FROM food WHERE day_timestamp BETWEEN :from AND :to")
     fun getFoodBetweenTime(from: Long, to: Long): Single<List<Food>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)

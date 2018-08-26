@@ -1,44 +1,60 @@
 package com.yveschiong.macrofit.presenters
 
+import com.yveschiong.macrofit.constants.ResponseCode
 import com.yveschiong.macrofit.contracts.AddNutritionFactViewContract
 import javax.inject.Inject
 
 class AddNutritionFactPresenter<V : AddNutritionFactViewContract.View> @Inject constructor()
     : RootPresenter<V>(), AddNutritionFactViewContract.Presenter<V> {
 
+    // Helper method for easily checking all fields for errors
+    private fun validate(required: Boolean, invalid: Boolean, func: (Int) -> Unit): Boolean {
+        // Check if the input is not empty and if the value is greater than 0
+        when {
+            required -> func(ResponseCode.FIELD_IS_REQUIRED)
+            invalid -> func(ResponseCode.FIELD_IS_INVALID)
+            else -> {
+                func(ResponseCode.OK)
+                return true
+            }
+        }
+
+        return false
+    }
+
     override fun validateFoodName(input: String): Boolean {
-        val showErrorMessage = input.isEmpty()
-        view?.shouldShowFoodNameErrorMessage(showErrorMessage)
-        return !showErrorMessage
+        return validate(input.isEmpty(), false) {
+            view?.tryShowFoodNameErrorMessage(it)
+        }
     }
 
     override fun validateWeight(input: String): Boolean {
-        val showErrorMessage = input.isEmpty()
-        view?.shouldShowWeightErrorMessage(showErrorMessage)
-        return !showErrorMessage
+        return validate(input.isEmpty(), (input.toFloatOrNull() ?: 0.0f) <= 0.0f) {
+            view?.tryShowWeightErrorMessage(it)
+        }
     }
 
     override fun validateCalories(input: String): Boolean {
-        val showErrorMessage = input.isEmpty()
-        view?.shouldShowCaloriesErrorMessage(showErrorMessage)
-        return !showErrorMessage
+        return validate(input.isEmpty(), (input.toFloatOrNull() ?: 0.0f) <= 0.0f) {
+            view?.tryShowCaloriesErrorMessage(it)
+        }
     }
 
     override fun validateProtein(input: String): Boolean {
-        val showErrorMessage = input.isEmpty()
-        view?.shouldShowProteinErrorMessage(showErrorMessage)
-        return !showErrorMessage
+        return validate(input.isEmpty(), (input.toFloatOrNull() ?: 0.0f) <= 0.0f) {
+            view?.tryShowProteinErrorMessage(it)
+        }
     }
 
     override fun validateCarb(input: String): Boolean {
-        val showErrorMessage = input.isEmpty()
-        view?.shouldShowCarbErrorMessage(showErrorMessage)
-        return !showErrorMessage
+        return validate(input.isEmpty(), (input.toFloatOrNull() ?: 0.0f) <= 0.0f) {
+            view?.tryShowCarbErrorMessage(it)
+        }
     }
 
     override fun validateFat(input: String): Boolean {
-        val showErrorMessage = input.isEmpty()
-        view?.shouldShowFatErrorMessage(showErrorMessage)
-        return !showErrorMessage
+        return validate(input.isEmpty(), (input.toFloatOrNull() ?: 0.0f) <= 0.0f) {
+            view?.tryShowFatErrorMessage(it)
+        }
     }
 }

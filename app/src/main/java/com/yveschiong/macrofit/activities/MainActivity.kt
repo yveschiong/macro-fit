@@ -14,14 +14,13 @@ import com.yveschiong.easycalendar.views.MonthView
 import com.yveschiong.macrofit.App
 import com.yveschiong.macrofit.R
 import com.yveschiong.macrofit.constants.Constants
-import com.yveschiong.macrofit.constants.Constants.REQUEST_CODE_ADD_NUTRITION_FACT
 import com.yveschiong.macrofit.contracts.MainViewContract
 import com.yveschiong.macrofit.extensions.isExpanded
-import com.yveschiong.macrofit.extensions.launchActivity
 import com.yveschiong.macrofit.extensions.launchActivityForResult
 import com.yveschiong.macrofit.extensions.replaceFragment
 import com.yveschiong.macrofit.fragments.FoodFragment
 import com.yveschiong.macrofit.fragments.NutritionFactsFragment
+import com.yveschiong.macrofit.models.Food
 import com.yveschiong.macrofit.models.NutritionFact
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
@@ -102,6 +101,13 @@ class MainActivity : BaseActivity(), MainViewContract.View {
                 if (resultCode == Activity.RESULT_OK) {
                     data?.getParcelableExtra<NutritionFact>(Constants.RESULT_KEY)?.let {
                         presenter.addNutritionFact(it)
+                    }
+                }
+            }
+            Constants.REQUEST_CODE_ADD_FOOD -> {
+                if (resultCode == Activity.RESULT_OK) {
+                    data?.getParcelableExtra<Food>(Constants.RESULT_KEY)?.let {
+                        presenter.addFood(it)
                     }
                 }
             }
@@ -203,10 +209,13 @@ class MainActivity : BaseActivity(), MainViewContract.View {
         // When the fab is clicked, launch the appropriate activity
         when (id) {
             R.id.nav_food -> {
-                launchActivity(AddFoodActivity::class.java)
+                // We only need to pass in the currently selected date's timestamp
+                val intent = Intent(this, AddFoodActivity::class.java)
+                intent.putExtra(Constants.EXTRA_DAY_TIMESTAMP, monthView.selectedDay.time.time)
+                startActivityForResult(intent, Constants.REQUEST_CODE_ADD_FOOD)
             }
             R.id.nav_nutrition_facts -> {
-                launchActivityForResult(AddNutritionFactActivity::class.java, REQUEST_CODE_ADD_NUTRITION_FACT)
+                launchActivityForResult(AddNutritionFactActivity::class.java, Constants.REQUEST_CODE_ADD_NUTRITION_FACT)
             }
         }
     }

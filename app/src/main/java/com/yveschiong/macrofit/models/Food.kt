@@ -9,8 +9,8 @@ import kotlinx.android.parcel.Parcelize
 @Parcelize
 @Entity(tableName = "food")
 data class Food(
-    @ColumnInfo(name = "time_added")
-    var timeAdded: Long,
+    @ColumnInfo(name = "day_timestamp")
+    var dayTimestamp: Long,
 
     @ColumnInfo(name = "name")
     var name: String,

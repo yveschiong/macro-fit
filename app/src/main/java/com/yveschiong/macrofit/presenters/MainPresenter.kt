@@ -5,7 +5,9 @@ import com.yveschiong.macrofit.bus.events.DateEvents
 import com.yveschiong.macrofit.bus.events.UpdateEvents
 import com.yveschiong.macrofit.contracts.MainViewContract
 import com.yveschiong.macrofit.extensions.getNormalString
+import com.yveschiong.macrofit.models.Food
 import com.yveschiong.macrofit.models.NutritionFact
+import com.yveschiong.macrofit.repositories.FoodRepository
 import com.yveschiong.macrofit.repositories.NutritionFactsRepository
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -14,6 +16,7 @@ import javax.inject.Inject
 
 class MainPresenter<V : MainViewContract.View> @Inject constructor(
     private val bus: EventBus,
+    private val foodRepository: FoodRepository,
     private val nutritionFactsRepository: NutritionFactsRepository
 ) : RootPresenter<V>(), MainViewContract.Presenter<V> {
 
@@ -65,6 +68,16 @@ class MainPresenter<V : MainViewContract.View> @Inject constructor(
             .subscribe {
                 // Signal to listeners that the nutrition fact has been added
                 bus.post(UpdateEvents.AddedNutritionFactEvent(nutritionFact))
+            }
+            .addToDisposables()
+    }
+
+    override fun addFood(food: Food) {
+        foodRepository.addFood(food)
+            .subscribeOn(Schedulers.io())
+            .subscribe {
+                // Signal to listeners that a new food has been added
+                bus.post(UpdateEvents.AddedFoodEvent(food))
             }
             .addToDisposables()
     }

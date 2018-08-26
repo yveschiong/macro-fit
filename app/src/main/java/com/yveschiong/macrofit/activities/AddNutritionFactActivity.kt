@@ -3,10 +3,12 @@ package com.yveschiong.macrofit.activities
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.support.design.widget.TextInputLayout
 import android.widget.ArrayAdapter
 import com.yveschiong.macrofit.App
 import com.yveschiong.macrofit.R
 import com.yveschiong.macrofit.constants.Constants
+import com.yveschiong.macrofit.constants.ResponseCode
 import com.yveschiong.macrofit.contracts.AddNutritionFactViewContract
 import com.yveschiong.macrofit.models.NutritionFact
 import com.yveschiong.macrofit.models.Weight
@@ -71,27 +73,41 @@ class AddNutritionFactActivity : BaseActivity(), AddNutritionFactViewContract.Vi
         super.onDestroy()
     }
 
-    override fun shouldShowFoodNameErrorMessage(show: Boolean) {
-        nameLayout.error = if (show) getString(R.string.add_nutrition_fact_required_error_text) else null
+    private fun tryShowError(layout: TextInputLayout, code: Int) {
+        when (code) {
+            ResponseCode.FIELD_IS_REQUIRED -> {
+                layout.error = getString(R.string.field_required_error_text)
+            }
+            ResponseCode.FIELD_IS_INVALID -> {
+                layout.error = getString(R.string.field_invalid_error_text)
+            }
+            ResponseCode.OK -> {
+                layout.error = null
+            }
+        }
     }
 
-    override fun shouldShowWeightErrorMessage(show: Boolean) {
-        weightLayout.error = if (show) getString(R.string.add_nutrition_fact_required_error_text) else null
+    override fun tryShowFoodNameErrorMessage(code: Int) {
+        tryShowError(nameLayout, code)
     }
 
-    override fun shouldShowCaloriesErrorMessage(show: Boolean) {
-        caloriesLayout.error = if (show) getString(R.string.add_nutrition_fact_required_error_text) else null
+    override fun tryShowWeightErrorMessage(code: Int) {
+        tryShowError(weightLayout, code)
     }
 
-    override fun shouldShowProteinErrorMessage(show: Boolean) {
-        proteinLayout.error = if (show) getString(R.string.add_nutrition_fact_required_error_text) else null
+    override fun tryShowCaloriesErrorMessage(code: Int) {
+        tryShowError(caloriesLayout, code)
     }
 
-    override fun shouldShowCarbErrorMessage(show: Boolean) {
-        carbLayout.error = if (show) getString(R.string.add_nutrition_fact_required_error_text) else null
+    override fun tryShowProteinErrorMessage(code: Int) {
+        tryShowError(proteinLayout, code)
     }
 
-    override fun shouldShowFatErrorMessage(show: Boolean) {
-        fatLayout.error = if (show) getString(R.string.add_nutrition_fact_required_error_text) else null
+    override fun tryShowCarbErrorMessage(code: Int) {
+        tryShowError(carbLayout, code)
+    }
+
+    override fun tryShowFatErrorMessage(code: Int) {
+        tryShowError(fatLayout, code)
     }
 }

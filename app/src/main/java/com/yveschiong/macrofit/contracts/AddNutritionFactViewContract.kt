@@ -5,12 +5,12 @@ import com.yveschiong.macrofit.interfaces.BaseView
 
 interface AddNutritionFactViewContract {
     interface View : BaseView {
-        fun shouldShowFoodNameErrorMessage(show: Boolean)
-        fun shouldShowWeightErrorMessage(show: Boolean)
-        fun shouldShowCaloriesErrorMessage(show: Boolean)
-        fun shouldShowProteinErrorMessage(show: Boolean)
-        fun shouldShowCarbErrorMessage(show: Boolean)
-        fun shouldShowFatErrorMessage(show: Boolean)
+        fun tryShowFoodNameErrorMessage(code: Int)
+        fun tryShowWeightErrorMessage(code: Int)
+        fun tryShowCaloriesErrorMessage(code: Int)
+        fun tryShowProteinErrorMessage(code: Int)
+        fun tryShowCarbErrorMessage(code: Int)
+        fun tryShowFatErrorMessage(code: Int)
     }
 
     interface Presenter<V: View> : BasePresenter<V> {

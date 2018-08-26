@@ -3,6 +3,7 @@ package com.yveschiong.macrofit.presenters
 import com.yveschiong.easycalendar.utils.CalendarUtils
 import com.yveschiong.macrofit.bus.EventBus
 import com.yveschiong.macrofit.bus.events.DateEvents
+import com.yveschiong.macrofit.bus.events.UpdateEvents
 import com.yveschiong.macrofit.contracts.FoodViewContract
 import com.yveschiong.macrofit.repositories.FoodRepository
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -20,8 +21,25 @@ class FoodListPresenter<V: FoodViewContract.View> @Inject constructor(
         // Register to event bus for switched date events
         bus.listen<DateEvents.SwitchedDateEvent>()
             .subscribeOn(Schedulers.io())
-            .switchMap { day ->
-                val range = CalendarUtils.createCalendarRange(day.switchedDate)
+            .switchMap { event ->
+                val range = CalendarUtils.createCalendarRange(event.switchedDate)
+
+                // Get new foods that match the day criteria
+                foodRepository.getFoodBetweenTime(
+                    range.start.timeInMillis, range.end.timeInMillis
+                ).subscribeOn(Schedulers.io())
+            }
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe { view.showFood(it) }
+            .addToDisposables()
+
+        // Listen to added food events
+        bus.listen<UpdateEvents.AddedFoodEvent>()
+            .subscribeOn(Schedulers.io())
+            .switchMap { event ->
+                val calendar = CalendarUtils.createCalendar()
+                calendar.timeInMillis = event.food.dayTimestamp
+                val range = CalendarUtils.createCalendarRange(calendar)
 
                 // Get new foods that match the day criteria
                 foodRepository.getFoodBetweenTime(
