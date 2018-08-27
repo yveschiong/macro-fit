@@ -1,8 +1,22 @@
 <resources>
-
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
         <item name="android:statusBarColor">@android:color/transparent</item>
+    </style>
+
+    <style name="AddButtonStyle" parent="Widget.AppCompat.Button.Colored">
+        <item name="android:colorButtonNormal">@color/add_button_background_color</item>
+        <item name="android:textColor">@color/add_button_text_color</item>
+    </style>
+
+    <style name="EditButtonStyle" parent="Widget.AppCompat.Button.Colored">
+        <item name="android:colorButtonNormal">@color/edit_button_background_color</item>
+        <item name="android:textColor">@color/edit_button_text_color</item>
+    </style>
+
+    <style name="DeleteButtonStyle" parent="Widget.AppCompat.Button.Colored">
+        <item name="android:colorButtonNormal">@color/delete_button_background_color</item>
+        <item name="android:textColor">@color/delete_button_text_color</item>
     </style>
 </resources>

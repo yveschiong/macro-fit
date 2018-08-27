@@ -1,5 +1,4 @@
 <resources>
-
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- Customize your theme here. -->
@@ -46,4 +45,18 @@
         <item name="android:textColor">@android:color/white</item>
     </style>
 
+    <style name="AddButtonStyle" parent="Widget.AppCompat.Button.Colored">
+        <item name="colorButtonNormal">@color/add_button_background_color</item>
+        <item name="android:textColor">@color/add_button_text_color</item>
+    </style>
+
+    <style name="EditButtonStyle" parent="Widget.AppCompat.Button.Colored">
+        <item name="colorButtonNormal">@color/edit_button_background_color</item>
+        <item name="android:textColor">@color/edit_button_text_color</item>
+    </style>
+
+    <style name="DeleteButtonStyle" parent="Widget.AppCompat.Button.Colored">
+        <item name="colorButtonNormal">@color/delete_button_background_color</item>
+        <item name="android:textColor">@color/delete_button_text_color</item>
+    </style>
 </resources>

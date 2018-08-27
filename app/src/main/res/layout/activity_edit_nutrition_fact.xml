@@ -8,7 +8,7 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@id/add_button"
+        app:layout_constraintBottom_toTopOf="@id/edit_button"
         app:layout_constraintTop_toTopOf="parent">
 
         <android.support.constraint.ConstraintLayout
@@ -145,12 +145,23 @@
     </ScrollView>
 
     <Button
-        android:id="@+id/add_button"
+        android:id="@+id/edit_button"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/add_nutrition_fact_page_padding"
-        android:text="@string/add_nutrition_fact_button_text"
-        android:theme="@style/AddButtonStyle"
+        android:text="@string/edit_nutrition_fact_button_text"
+        android:theme="@style/EditButtonStyle"
+        app:layout_constraintBottom_toTopOf="@+id/delete_button"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent" />
+
+    <Button
+        android:id="@+id/delete_button"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/add_nutrition_fact_page_padding"
+        android:text="@string/delete_nutrition_fact_button_text"
+        android:theme="@style/DeleteButtonStyle"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent" />

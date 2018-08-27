@@ -13,6 +13,7 @@ class NutritionFactsListViewHolder(itemView: View) : RecyclerView.ViewHolder(ite
     val proteinTextView: TextView
     val carbsTextView: TextView
     val fatTextView: TextView
+    val editView: View
 
     init {
         foodNameTextView = itemView.findViewById(R.id.name)
@@ -21,5 +22,6 @@ class NutritionFactsListViewHolder(itemView: View) : RecyclerView.ViewHolder(ite
         proteinTextView = itemView.findViewById(R.id.protein)
         carbsTextView = itemView.findViewById(R.id.carbs)
         fatTextView = itemView.findViewById(R.id.fat)
+        editView = itemView.findViewById(R.id.editWrapper)
     }
 }

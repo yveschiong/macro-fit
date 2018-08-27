@@ -4,13 +4,24 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.yveschiong.macrofit.R
+import com.yveschiong.macrofit.interfaces.OnAdapterViewClicked
 import com.yveschiong.macrofit.models.NutritionFact
 import com.yveschiong.macrofit.viewholders.NutritionFactsListViewHolder
 
-class NutritionFactsListAdapter(private var nutritionFactsList: List<NutritionFact>) : RecyclerView.Adapter<NutritionFactsListViewHolder>() {
+class NutritionFactsListAdapter(
+    private var nutritionFactsList: List<NutritionFact>,
+    private val listener: OnAdapterViewClicked.NutritionFactView
+) : RecyclerView.Adapter<NutritionFactsListViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NutritionFactsListViewHolder {
-        return NutritionFactsListViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.list_item_food, parent, false))
+        val holder = NutritionFactsListViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.list_item_food, parent, false))
+
+        // Handle the click for the edit button
+        holder.editView.setOnClickListener {
+            listener.onViewClicked(nutritionFactsList[holder.adapterPosition])
+        }
+
+        return holder
     }
 
     override fun onBindViewHolder(holder: NutritionFactsListViewHolder, position: Int) {

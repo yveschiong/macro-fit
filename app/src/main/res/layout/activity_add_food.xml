@@ -86,11 +86,11 @@
 
     <Button
         android:id="@+id/add_button"
-        style="@style/Widget.AppCompat.Button.Colored"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/add_food_page_padding"
         android:text="@string/add_food_button_text"
+        android:theme="@style/AddButtonStyle"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent" />

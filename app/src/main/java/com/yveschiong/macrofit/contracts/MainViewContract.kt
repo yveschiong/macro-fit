@@ -27,6 +27,8 @@ interface MainViewContract {
         fun onMonthViewDaySelected(day: Calendar)
         fun onFabClickedFrom(id: Int?)
         fun addNutritionFact(nutritionFact: NutritionFact)
+        fun editNutritionFact(nutritionFact: NutritionFact)
+        fun deleteNutritionFact(nutritionFact: NutritionFact)
         fun addFood(food: Food)
     }
 }

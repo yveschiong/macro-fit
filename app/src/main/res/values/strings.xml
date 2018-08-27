@@ -3,6 +3,7 @@
 
     <string name="add_new_food_label">Add a new Food</string>
     <string name="add_new_nutrition_fact_label">Add a new Nutrition Fact</string>
+    <string name="edit_nutrition_fact_label">Edit the Nutrition Fact</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -34,6 +35,14 @@
     <string name="add_nutrition_fact_carb">Carbohydrate (g)</string>
     <string name="add_nutrition_fact_fat">Fat (g)</string>
     <string name="add_nutrition_fact_button_text">Add Nutrition Fact</string>
+
+    <string name="edit_nutrition_fact_button_text">Edit Nutrition Fact</string>
+    <string name="delete_nutrition_fact_button_text">Delete Nutrition Fact</string>
+
+    <string name="delete_dialog_title">Deletion Confirmation</string>
+    <string name="delete_dialog_message">Are you sure you want to delete?</string>
+    <string name="delete_dialog_yes">Yes</string>
+    <string name="delete_dialog_no">No</string>
 
     <string name="field_required_error_text">This field is required.</string>
     <string name="field_invalid_error_text">This input is invalid.</string>

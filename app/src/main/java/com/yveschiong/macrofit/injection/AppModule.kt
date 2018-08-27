@@ -73,6 +73,13 @@ class AppModule(private val context: Context) {
 
     @Provides
     @Singleton
+    fun provideEditNutritionFactPresenter(presenter: EditNutritionFactPresenter<EditNutritionFactViewContract.View>):
+        EditNutritionFactViewContract.Presenter<EditNutritionFactViewContract.View> {
+        return presenter
+    }
+
+    @Provides
+    @Singleton
     fun provideAddFoodPresenter(presenter: AddFoodPresenter<AddFoodViewContract.View>):
         AddFoodViewContract.Presenter<AddFoodViewContract.View> {
         return presenter

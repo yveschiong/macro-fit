@@ -7,9 +7,11 @@ import com.yveschiong.macrofit.models.NutritionFact
 interface NutritionFactsViewContract {
     interface View : BaseView {
         fun showNutrition(nutritionList: List<NutritionFact>)
+        fun showEditNutritionFactActivity(nutritionFact: NutritionFact)
     }
 
     interface Presenter<V: View> : BasePresenter<V> {
         fun fetchNutrition()
+        fun onEditClicked(nutritionFact: NutritionFact)
     }
 }

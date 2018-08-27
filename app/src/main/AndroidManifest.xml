@@ -28,6 +28,10 @@
             android:name=".activities.AddNutritionFactActivity"
             android:label="@string/add_new_nutrition_fact_label"
             android:parentActivityName=".activities.MainActivity" />
+        <activity
+            android:name=".activities.EditNutritionFactActivity"
+            android:label="@string/edit_nutrition_fact_label"
+            android:parentActivityName=".activities.MainActivity" />
     </application>
 
 </manifest>

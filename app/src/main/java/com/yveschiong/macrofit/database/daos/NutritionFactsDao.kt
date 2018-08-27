@@ -1,9 +1,6 @@
 package com.yveschiong.macrofit.database.daos
 
-import android.arch.persistence.room.Dao
-import android.arch.persistence.room.Insert
-import android.arch.persistence.room.OnConflictStrategy
-import android.arch.persistence.room.Query
+import android.arch.persistence.room.*
 import com.yveschiong.macrofit.models.NutritionFact
 import io.reactivex.Single
 
@@ -17,6 +14,9 @@ interface NutritionFactsDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertAll(nutritionFact: List<NutritionFact>)
+
+    @Delete
+    fun delete(nutritionFact: NutritionFact)
 
     @Query("DELETE FROM nutrition_facts")
     fun deleteAll()

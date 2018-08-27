@@ -104,6 +104,17 @@ class MainActivity : BaseActivity(), MainViewContract.View {
                     }
                 }
             }
+            Constants.REQUEST_CODE_EDIT_NUTRITION_FACT -> {
+                if (resultCode == Activity.RESULT_OK) {
+                    data?.getParcelableExtra<NutritionFact>(Constants.RESULT_KEY)?.let {
+                        if (data.getBooleanExtra(Constants.EXTRA_SHOULD_DELETE, false)) {
+                            presenter.deleteNutritionFact(it)
+                        } else {
+                            presenter.editNutritionFact(it)
+                        }
+                    }
+                }
+            }
             Constants.REQUEST_CODE_ADD_FOOD -> {
                 if (resultCode == Activity.RESULT_OK) {
                     data?.getParcelableExtra<Food>(Constants.RESULT_KEY)?.let {

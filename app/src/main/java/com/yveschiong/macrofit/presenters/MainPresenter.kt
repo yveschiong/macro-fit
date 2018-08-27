@@ -72,6 +72,26 @@ class MainPresenter<V : MainViewContract.View> @Inject constructor(
             .addToDisposables()
     }
 
+    override fun editNutritionFact(nutritionFact: NutritionFact) {
+        nutritionFactsRepository.updateNutritionFact(nutritionFact)
+            .subscribeOn(Schedulers.io())
+            .subscribe {
+                // Signal to listeners that the nutrition fact has been edited
+                bus.post(UpdateEvents.EditedNutritionFactEvent(nutritionFact))
+            }
+            .addToDisposables()
+    }
+
+    override fun deleteNutritionFact(nutritionFact: NutritionFact) {
+        nutritionFactsRepository.deleteNutritionFact(nutritionFact)
+            .subscribeOn(Schedulers.io())
+            .subscribe {
+                // Signal to listeners that the nutrition fact has been deleted
+                bus.post(UpdateEvents.DeletedNutritionFactEvent(nutritionFact))
+            }
+            .addToDisposables()
+    }
+
     override fun addFood(food: Food) {
         foodRepository.addFood(food)
             .subscribeOn(Schedulers.io())
