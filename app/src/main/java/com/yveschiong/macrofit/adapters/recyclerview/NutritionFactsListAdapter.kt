@@ -16,8 +16,8 @@ class NutritionFactsListAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NutritionFactsListViewHolder {
         val holder = NutritionFactsListViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.list_item_food, parent, false))
 
-        // Handle the click for the edit button
-        holder.editView.setOnClickListener {
+        // Handle the click for the card
+        holder.itemView.setOnClickListener {
             listener.onViewClicked(nutritionFactsList[holder.adapterPosition])
         }
 

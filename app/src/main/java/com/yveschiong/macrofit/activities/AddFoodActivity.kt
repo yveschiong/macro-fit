@@ -35,9 +35,6 @@ class AddFoodActivity : BaseActivity(), AddFoodViewContract.View {
 
         presenter.fetchNutritionFacts()
 
-        // We want to hide the edit icon since this is just a preview
-        editWrapper.visibility = View.GONE
-
         // Set the spinner item selected listener to respond accordingly
         nutritionFactSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(parent: AdapterView<*>?) {

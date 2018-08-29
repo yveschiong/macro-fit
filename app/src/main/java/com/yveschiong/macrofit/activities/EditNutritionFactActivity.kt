@@ -2,7 +2,6 @@ package com.yveschiong.macrofit.activities
 
 import android.app.Activity
 import android.app.AlertDialog
-import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.TextInputLayout
@@ -99,7 +98,7 @@ class EditNutritionFactActivity : BaseActivity(), EditNutritionFactViewContract.
             AlertDialog.Builder(this)
                 .setTitle(R.string.delete_dialog_title)
                 .setMessage(R.string.delete_dialog_message)
-                .setPositiveButton(R.string.delete_dialog_yes) { _: DialogInterface, _: Int ->
+                .setPositiveButton(R.string.delete_dialog_yes) { _, _ ->
                     // Pass back the soon to be deleted nutrition fact
                     val result = Intent()
                     result.putExtra(Constants.RESULT_KEY, nutritionFact)
@@ -109,7 +108,7 @@ class EditNutritionFactActivity : BaseActivity(), EditNutritionFactViewContract.
                     setResult(Activity.RESULT_OK, result)
                     finish()
                 }
-                .setNegativeButton(R.string.delete_dialog_no) { _: DialogInterface, _: Int ->
+                .setNegativeButton(R.string.delete_dialog_no) { _, _ ->
                     // Do nothing
                 }
                 .create()

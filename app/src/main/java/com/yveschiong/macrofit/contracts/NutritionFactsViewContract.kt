@@ -12,6 +12,6 @@ interface NutritionFactsViewContract {
 
     interface Presenter<V: View> : BasePresenter<V> {
         fun fetchNutrition()
-        fun onEditClicked(nutritionFact: NutritionFact)
+        fun onCardClicked(nutritionFact: NutritionFact)
     }
 }

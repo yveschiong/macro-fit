@@ -46,7 +46,7 @@ class NutritionFactsListPresenter<V : NutritionFactsViewContract.View> @Inject c
             .addToDisposables()
     }
 
-    override fun onEditClicked(nutritionFact: NutritionFact) {
+    override fun onCardClicked(nutritionFact: NutritionFact) {
         view?.showEditNutritionFactActivity(nutritionFact)
     }
 }

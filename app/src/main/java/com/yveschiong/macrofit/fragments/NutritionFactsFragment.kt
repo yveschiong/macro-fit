@@ -25,7 +25,7 @@ class NutritionFactsFragment: BaseFragment(), NutritionFactsViewContract.View {
 
     private val adapter: NutritionFactsListAdapter = NutritionFactsListAdapter(ArrayList(), object: OnAdapterViewClicked.NutritionFactView {
         override fun onViewClicked(nutritionFact: NutritionFact) {
-            presenter.onEditClicked(nutritionFact)
+            presenter.onCardClicked(nutritionFact)
         }
     })
 
