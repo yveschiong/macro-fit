@@ -2,12 +2,16 @@ package com.yveschiong.macrofit.models
 
 import android.arch.persistence.room.ColumnInfo
 import android.arch.persistence.room.Entity
+import android.arch.persistence.room.Index
 import android.arch.persistence.room.PrimaryKey
 import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
-@Entity(tableName = "nutrition_facts")
+@Entity(
+    tableName = "nutrition_facts",
+    indices = [Index(value = ["id", "name"], name = "index_nutrition_facts_id_name", unique = true)]
+)
 data class NutritionFact(
     @ColumnInfo(name = "name")
     var name: String,

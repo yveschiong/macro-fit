@@ -30,5 +30,7 @@ interface MainViewContract {
         fun editNutritionFact(nutritionFact: NutritionFact)
         fun deleteNutritionFact(nutritionFact: NutritionFact)
         fun addFood(food: Food)
+        fun editFood(food: Food)
+        fun deleteFood(food: Food)
     }
 }

@@ -1,6 +1,7 @@
 package com.yveschiong.macrofit.activities
 
 import android.app.Activity
+import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
@@ -12,26 +13,39 @@ import com.yveschiong.macrofit.R
 import com.yveschiong.macrofit.adapters.array.NutritionFactsSpinner
 import com.yveschiong.macrofit.constants.Constants
 import com.yveschiong.macrofit.constants.ResponseCode
-import com.yveschiong.macrofit.contracts.AddFoodViewContract
+import com.yveschiong.macrofit.contracts.EditFoodViewContract
+import com.yveschiong.macrofit.models.Food
 import com.yveschiong.macrofit.models.NutritionFact
 import com.yveschiong.macrofit.models.Weight
-import kotlinx.android.synthetic.main.activity_add_food.*
+import kotlinx.android.synthetic.main.activity_edit_food.*
 import kotlinx.android.synthetic.main.list_item_food.*
-import java.util.*
 import javax.inject.Inject
 
-class AddFoodActivity : BaseActivity(), AddFoodViewContract.View {
+class EditFoodActivity : BaseActivity(), EditFoodViewContract.View {
 
     @Inject
-    lateinit var presenter: AddFoodViewContract.Presenter<AddFoodViewContract.View>
+    lateinit var presenter: EditFoodViewContract.Presenter<EditFoodViewContract.View>
+
+    private var food: Food = Food()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_add_food)
+        setContentView(R.layout.activity_edit_food)
 
         App.graph.inject(this)
 
         presenter.onAttach(this)
+
+        // We have to disable text input layout hint animations since we are programmatically
+        // setting the text input edit texts' texts and don't want the hint to be animated
+        enableTextInputLayoutHintAnimations(false)
+
+        food = intent.extras.getParcelable(Constants.EXTRA_FOOD)
+        weight.setText(food.amount.toString())
+
+        // We will need to enable the text input layout hint animations again so that it would
+        // would like it normally does for regular input
+        enableTextInputLayoutHintAnimations(true)
 
         presenter.fetchNutritionFacts()
 
@@ -67,12 +81,12 @@ class AddFoodActivity : BaseActivity(), AddFoodViewContract.View {
             }
         })
 
-        add_button.setOnClickListener { _ ->
+        edit_button.setOnClickListener { _ ->
             val weightText = weight.text.toString()
             val isWeightValid = presenter.validateWeight(weightText)
 
             if (isWeightValid) {
-                // Validated the fields so we can create a new food
+                // Validated the fields so we can edit the food
                 val result = Intent()
                 nutritionFactSpinner.selectedItem.let {
                     if (it !is NutritionFact) {
@@ -81,22 +95,46 @@ class AddFoodActivity : BaseActivity(), AddFoodViewContract.View {
                         return@setOnClickListener
                     }
 
-                    // Setup a result food object
-                    result.putExtra(Constants.RESULT_KEY,
-                        presenter.createFood(
-                            intent.getLongExtra(Constants.EXTRA_DAY_TIMESTAMP, Date().time),
-                            it, presenter.parseWeightText(weightText)))
+                    presenter.modifyFood(food, it, presenter.parseWeightText(weightText))
+
+                    // Pass back the edited food
+                    result.putExtra(Constants.RESULT_KEY, food)
                 }
 
                 setResult(Activity.RESULT_OK, result)
                 finish()
             }
         }
+
+        delete_button.setOnClickListener {
+            AlertDialog.Builder(this)
+                .setTitle(R.string.delete_dialog_title)
+                .setMessage(R.string.delete_dialog_message)
+                .setPositiveButton(R.string.delete_dialog_yes) { _, _ ->
+                    // Pass back the soon to be deleted food
+                    val result = Intent()
+                    result.putExtra(Constants.RESULT_KEY, food)
+                    // Add a flag to show that we want to delete this nutrition fact
+                    result.putExtra(Constants.EXTRA_SHOULD_DELETE, true)
+
+                    setResult(Activity.RESULT_OK, result)
+                    finish()
+                }
+                .setNegativeButton(R.string.delete_dialog_no) { _, _ ->
+                    // Do nothing
+                }
+                .create()
+                .show()
+        }
     }
 
     override fun onDestroy() {
         presenter.onDetach()
         super.onDestroy()
+    }
+
+    private fun enableTextInputLayoutHintAnimations(enabled: Boolean) {
+        weightLayout.isHintAnimationEnabled = enabled
     }
 
     private fun setWeight(text: String?) {
@@ -116,15 +154,15 @@ class AddFoodActivity : BaseActivity(), AddFoodViewContract.View {
         // Apply the adapter to the spinner
         nutritionFactSpinner.adapter = adapter
 
-        // Select the default nutrition fact
-        nutritionFactSpinner.selectedItem.let {
-            if (it is NutritionFact) {
-                presenter.selectNutritionFact(it)
-            }
-        }
+        // Select the food's nutrition fact
+        presenter.selectNutritionFact(food, nutritionFacts)
 
-        // We want to set an initial weight so that the card can be populated
+        // We want to set the food's weight so that the card can be populated
         setWeight(weight.text.toString())
+    }
+
+    override fun setSelectedNutritionFactPosition(position: Int) {
+        nutritionFactSpinner.setSelection(position)
     }
 
     override fun setUnitText(text: String) {

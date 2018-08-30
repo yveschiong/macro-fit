@@ -87,6 +87,13 @@ class AppModule(private val context: Context) {
 
     @Provides
     @Singleton
+    fun provideEditFoodPresenter(presenter: EditFoodPresenter<EditFoodViewContract.View>):
+        EditFoodViewContract.Presenter<EditFoodViewContract.View> {
+        return presenter
+    }
+
+    @Provides
+    @Singleton
     fun provideFoodListPresenter(presenter: FoodListPresenter<FoodViewContract.View>):
         FoodViewContract.Presenter<FoodViewContract.View> {
         return presenter

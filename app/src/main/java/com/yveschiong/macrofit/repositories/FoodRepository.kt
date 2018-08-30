@@ -17,6 +17,14 @@ class FoodRepository(private val foodDao: FoodDao) {
         return Observable.fromCallable { foodDao.insert(food) }
     }
 
+    fun updateFood(food: Food): Observable<Unit> {
+        return Observable.fromCallable { foodDao.insert(food) }
+    }
+
+    fun deleteFood(food: Food): Observable<Unit> {
+        return Observable.fromCallable { foodDao.delete(food) }
+    }
+
     // Want to get the observable so we can observe the deletion
     fun deleteAllFood(): Observable<Unit> {
         return Observable.fromCallable { foodDao.deleteAll() }

@@ -18,12 +18,12 @@ import com.yveschiong.macrofit.models.NutritionFact
 import kotlinx.android.synthetic.main.fragment_food.view.*
 import javax.inject.Inject
 
-class NutritionFactsFragment: BaseFragment(), NutritionFactsViewContract.View {
+class NutritionFactsFragment : BaseFragment(), NutritionFactsViewContract.View {
 
     @Inject
     lateinit var presenter: NutritionFactsViewContract.Presenter<NutritionFactsViewContract.View>
 
-    private val adapter: NutritionFactsListAdapter = NutritionFactsListAdapter(ArrayList(), object: OnAdapterViewClicked.NutritionFactView {
+    private val adapter: NutritionFactsListAdapter = NutritionFactsListAdapter(ArrayList(), object : OnAdapterViewClicked.NutritionFactView {
         override fun onViewClicked(nutritionFact: NutritionFact) {
             presenter.onCardClicked(nutritionFact)
         }

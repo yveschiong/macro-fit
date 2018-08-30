@@ -8,4 +8,6 @@ class UpdateEvents {
     class EditedNutritionFactEvent(val nutritionFact: NutritionFact): Event()
     class DeletedNutritionFactEvent(val nutritionFact: NutritionFact): Event()
     class AddedFoodEvent(val food: Food): Event()
+    class EditedFoodEvent(val food: Food): Event()
+    class DeletedFoodEvent(val food: Food): Event()
 }

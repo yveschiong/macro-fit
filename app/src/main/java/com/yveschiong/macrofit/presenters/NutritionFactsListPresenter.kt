@@ -18,7 +18,7 @@ class NutritionFactsListPresenter<V : NutritionFactsViewContract.View> @Inject c
         super.onAttach(view)
 
         // For now, the add, edit, and delete events will just cause
-        // a complete fetch of the nutrition table
+        // a complete fetch of the nutrition facts table
         bus.listen<UpdateEvents.AddedNutritionFactEvent>()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())

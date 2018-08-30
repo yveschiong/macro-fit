@@ -25,6 +25,10 @@
             android:label="@string/add_new_food_label"
             android:parentActivityName=".activities.MainActivity" />
         <activity
+            android:name=".activities.EditFoodActivity"
+            android:label="@string/edit_food_label"
+            android:parentActivityName=".activities.MainActivity" />
+        <activity
             android:name=".activities.AddNutritionFactActivity"
             android:label="@string/add_new_nutrition_fact_label"
             android:parentActivityName=".activities.MainActivity" />

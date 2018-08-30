@@ -101,4 +101,24 @@ class MainPresenter<V : MainViewContract.View> @Inject constructor(
             }
             .addToDisposables()
     }
+
+    override fun editFood(food: Food) {
+        foodRepository.updateFood(food)
+            .subscribeOn(Schedulers.io())
+            .subscribe {
+                // Signal to listeners that the food has been edited
+                bus.post(UpdateEvents.EditedFoodEvent(food))
+            }
+            .addToDisposables()
+    }
+
+    override fun deleteFood(food: Food) {
+        foodRepository.deleteFood(food)
+            .subscribeOn(Schedulers.io())
+            .subscribe {
+                // Signal to listeners that the food has been deleted
+                bus.post(UpdateEvents.DeletedFoodEvent(food))
+            }
+            .addToDisposables()
+    }
 }

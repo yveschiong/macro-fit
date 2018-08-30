@@ -122,6 +122,17 @@ class MainActivity : BaseActivity(), MainViewContract.View {
                     }
                 }
             }
+            Constants.REQUEST_CODE_EDIT_FOOD -> {
+                if (resultCode == Activity.RESULT_OK) {
+                    data?.getParcelableExtra<Food>(Constants.RESULT_KEY)?.let {
+                        if (data.getBooleanExtra(Constants.EXTRA_SHOULD_DELETE, false)) {
+                            presenter.deleteFood(it)
+                        } else {
+                            presenter.editFood(it)
+                        }
+                    }
+                }
+            }
         }
     }
 

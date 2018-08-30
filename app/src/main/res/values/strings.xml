@@ -2,8 +2,9 @@
     <string name="app_name">Macro Fit</string>
 
     <string name="add_new_food_label">Add a new Food</string>
+    <string name="edit_food_label">Edit Food</string>
     <string name="add_new_nutrition_fact_label">Add a new Nutrition Fact</string>
-    <string name="edit_nutrition_fact_label">Edit the Nutrition Fact</string>
+    <string name="edit_nutrition_fact_label">Edit Nutrition Fact</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -50,4 +51,6 @@
     <string name="add_food_choose_nutrition_fact">Choose a nutrition fact:</string>
     <string name="add_food_button_text">Add Food</string>
 
+    <string name="edit_food_button_text">Edit Food</string>
+    <string name="delete_food_button_text">Delete Food</string>
 </resources>

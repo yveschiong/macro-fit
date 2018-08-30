@@ -6,9 +6,10 @@ import com.yveschiong.macrofit.models.Food
 import com.yveschiong.macrofit.models.NutritionFact
 import com.yveschiong.macrofit.models.Weight
 
-interface AddFoodViewContract {
+interface EditFoodViewContract {
     interface View : BaseView {
         fun showNutritionFacts(nutritionFacts: List<NutritionFact>)
+        fun setSelectedNutritionFactPosition(position: Int)
         fun setUnitText(text: String)
         fun tryShowWeightErrorMessage(code: Int)
         fun setCardData(name: String,
@@ -25,9 +26,11 @@ interface AddFoodViewContract {
     interface Presenter<V: View> : BasePresenter<V> {
         fun fetchNutritionFacts()
         fun selectNutritionFact(nutritionFact: NutritionFact)
+        fun selectNutritionFact(food: Food, nutritionFacts: List<NutritionFact>)
         fun validateWeight(input: String): Boolean
         fun parseWeightText(text: String?): Float
         fun setWeight(nutritionFact: NutritionFact, weightAmount: Float)
         fun createFood(timeAdded: Long, nutritionFact: NutritionFact, weightAmount: Float): Food
+        fun modifyFood(food: Food, nutritionFact: NutritionFact, weightAmount: Float)
     }
 }
