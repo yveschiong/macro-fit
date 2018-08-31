@@ -16,7 +16,7 @@ interface AddNutritionFactViewContract {
     interface Presenter<V: View> : BasePresenter<V> {
         // Food name validation is done differently due to the need
         // to check for name uniqueness which requires a fetch
-        fun validateFoodName(input: String, func: (Boolean) -> Unit)
+        fun validateFoodName(input: String, successFunc: () -> Unit)
 
         // If the field is valid then return true, false otherwise
         fun validateWeight(input: String): Boolean

@@ -53,21 +53,18 @@ class AddNutritionFactActivity : BaseActivity(), AddNutritionFactViewContract.Vi
             val isCarbValid = presenter.validateCarb(carbText)
             val isFatValid = presenter.validateFat(fatText)
 
-            if (isWeightValid && isCaloriesValid
-                && isProteinValid && isCarbValid && isFatValid) {
+            // We need to validate for the food name's uniqueness
+            presenter.validateFoodName(nameText) {
+                if (isWeightValid && isCaloriesValid
+                    && isProteinValid && isCarbValid && isFatValid) {
+                    // Validated the fields so we can create a nutrition fact
+                    val result = Intent()
+                    result.putExtra(Constants.RESULT_KEY,
+                        NutritionFact(nameText, weightText.toFloat(), unitText, caloriesText.toFloat(),
+                            proteinText.toFloat(), carbText.toFloat(), fatText.toFloat()))
 
-                // If all the other fields have been validated, we need to validate for the food name
-                presenter.validateFoodName(nameText) {
-                    if (it) {
-                        // Validated the fields so we can create a nutrition fact
-                        val result = Intent()
-                        result.putExtra(Constants.RESULT_KEY,
-                            NutritionFact(nameText, weightText.toFloat(), unitText, caloriesText.toFloat(),
-                                proteinText.toFloat(), carbText.toFloat(), fatText.toFloat()))
-
-                        setResult(Activity.RESULT_OK, result)
-                        finish()
-                    }
+                    setResult(Activity.RESULT_OK, result)
+                    finish()
                 }
             }
         }

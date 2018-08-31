@@ -25,27 +25,26 @@ class AddNutritionFactPresenter<V : AddNutritionFactViewContract.View> @Inject c
         return false
     }
 
-    override fun validateFoodName(input: String, func: (Boolean) -> Unit) {
+    override fun validateFoodName(input: String, successFunc: () -> Unit) {
         if (!validate(input.isEmpty(), false) { view?.tryShowFoodNameErrorMessage(it) }) {
+            // If the simple validation fails then skip the uniqueness check
             return
         }
 
         // Check the database to see if the name already exists
-        var exists = false
-
         nutritionFactsRepository.alreadyExists(input)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe { exists = it }
+            .subscribe {
+                if (it) {
+                    // Show an error message for the value being a duplicate
+                    view?.tryShowFoodNameErrorMessage(ResponseCode.FIELD_VALUE_ALREADY_EXISTS)
+                } else {
+                    // The name does not exist so it passes the uniqueness check
+                    successFunc()
+                }
+            }
             .addToDisposables()
-
-        // Input is not a duplicate, so return a valid response
-        if (!exists) {
-            return
-        }
-
-        // Show an error message for the value being a duplicate
-        view?.tryShowFoodNameErrorMessage(ResponseCode.FIELD_VALUE_ALREADY_EXISTS)
     }
 
     override fun validateWeight(input: String): Boolean {
