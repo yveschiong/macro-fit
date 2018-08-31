@@ -36,7 +36,7 @@ class AddNutritionFactActivity : BaseActivity(), AddNutritionFactViewContract.Vi
         // Apply the adapter to the spinner
         unitsSpinner.adapter = adapter
 
-        add_button.setOnClickListener {
+        add_button.setOnClickListener { _ ->
             val nameText = name.text.toString()
             val weightText = weight.text.toString()
             val unitText = unitsSpinner.selectedItem.toString()
@@ -47,23 +47,28 @@ class AddNutritionFactActivity : BaseActivity(), AddNutritionFactViewContract.Vi
 
             // We want to validate all the fields at once so we can show
             // all the error messages at once
-            val isFoodNameValid = presenter.validateFoodName(nameText)
             val isWeightValid = presenter.validateWeight(weightText)
             val isCaloriesValid = presenter.validateCalories(caloriesText)
             val isProteinValid = presenter.validateProtein(proteinText)
             val isCarbValid = presenter.validateCarb(carbText)
             val isFatValid = presenter.validateFat(fatText)
 
-            if (isFoodNameValid && isWeightValid && isCaloriesValid
+            if (isWeightValid && isCaloriesValid
                 && isProteinValid && isCarbValid && isFatValid) {
-                // Validated the fields so we can create a nutrition fact
-                val result = Intent()
-                result.putExtra(Constants.RESULT_KEY,
-                    NutritionFact(nameText, weightText.toFloat(), unitText, caloriesText.toFloat(),
-                        proteinText.toFloat(), carbText.toFloat(), fatText.toFloat()))
 
-                setResult(Activity.RESULT_OK, result)
-                finish()
+                // If all the other fields have been validated, we need to validate for the food name
+                presenter.validateFoodName(nameText) {
+                    if (it) {
+                        // Validated the fields so we can create a nutrition fact
+                        val result = Intent()
+                        result.putExtra(Constants.RESULT_KEY,
+                            NutritionFact(nameText, weightText.toFloat(), unitText, caloriesText.toFloat(),
+                                proteinText.toFloat(), carbText.toFloat(), fatText.toFloat()))
+
+                        setResult(Activity.RESULT_OK, result)
+                        finish()
+                    }
+                }
             }
         }
     }
@@ -80,6 +85,9 @@ class AddNutritionFactActivity : BaseActivity(), AddNutritionFactViewContract.Vi
             }
             ResponseCode.FIELD_IS_INVALID -> {
                 layout.error = getString(R.string.field_invalid_error_text)
+            }
+            ResponseCode.FIELD_VALUE_ALREADY_EXISTS -> {
+                layout.error = getString(R.string.field_value_already_exists_error_text)
             }
             ResponseCode.OK -> {
                 layout.error = null

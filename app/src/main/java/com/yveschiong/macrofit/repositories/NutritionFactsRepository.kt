@@ -9,6 +9,10 @@ class NutritionFactsRepository(private val nutritionFactsDao: NutritionFactsDao)
         return nutritionFactsDao.getNutritionFacts().toObservable()
     }
 
+    fun alreadyExists(name: String): Observable<Boolean> {
+        return nutritionFactsDao.alreadyExists(name).toObservable()
+    }
+
     fun addNutritionFact(nutritionFact: NutritionFact): Observable<Unit> {
         return Observable.fromCallable { nutritionFactsDao.insert(nutritionFact) }
     }

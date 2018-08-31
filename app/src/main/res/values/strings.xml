@@ -47,6 +47,7 @@
 
     <string name="field_required_error_text">This field is required.</string>
     <string name="field_invalid_error_text">This input is invalid.</string>
+    <string name="field_value_already_exists_error_text">This input already exists.</string>
 
     <string name="add_food_choose_nutrition_fact">Choose a nutrition fact:</string>
     <string name="add_food_button_text">Add Food</string>
