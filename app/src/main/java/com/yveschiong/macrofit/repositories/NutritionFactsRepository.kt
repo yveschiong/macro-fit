@@ -18,7 +18,7 @@ class NutritionFactsRepository(private val nutritionFactsDao: NutritionFactsDao)
     }
 
     fun updateNutritionFact(nutritionFact: NutritionFact): Observable<Unit> {
-        return Observable.fromCallable { nutritionFactsDao.insert(nutritionFact) }
+        return Observable.fromCallable { nutritionFactsDao.update(nutritionFact) }
     }
 
     fun deleteNutritionFact(nutritionFact: NutritionFact): Observable<Unit> {

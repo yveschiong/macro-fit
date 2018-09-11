@@ -18,7 +18,7 @@ class FoodRepository(private val foodDao: FoodDao) {
     }
 
     fun updateFood(food: Food): Observable<Unit> {
-        return Observable.fromCallable { foodDao.insert(food) }
+        return Observable.fromCallable { foodDao.update(food) }
     }
 
     fun deleteFood(food: Food): Observable<Unit> {

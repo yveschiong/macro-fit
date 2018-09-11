@@ -11,6 +11,7 @@ import kotlinx.android.parcel.Parcelize
     foreignKeys = [ForeignKey(entity = NutritionFact::class,
         parentColumns = ["id", "name"],
         childColumns = ["fact_id", "name"],
+        onUpdate = ForeignKey.CASCADE,
         onDelete = ForeignKey.CASCADE)]
 )
 data class Food(

@@ -15,8 +15,8 @@ interface NutritionFactsDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(nutritionFact: NutritionFact)
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertAll(nutritionFact: List<NutritionFact>)
+    @Update(onConflict = OnConflictStrategy.REPLACE)
+    fun update(nutritionFact: NutritionFact)
 
     @Delete
     fun delete(nutritionFact: NutritionFact)
