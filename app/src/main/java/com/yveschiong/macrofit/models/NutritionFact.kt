@@ -10,7 +10,7 @@ import kotlinx.android.parcel.Parcelize
 @Parcelize
 @Entity(
     tableName = "nutrition_facts",
-    indices = [Index(value = ["id", "name"], name = "index_nutrition_facts_id_name", unique = true)]
+    indices = [Index(value = ["id", "name", "unit"], name = "index_nutrition_facts_id_name_unit", unique = true)]
 )
 data class NutritionFact(
     @ColumnInfo(name = "name")

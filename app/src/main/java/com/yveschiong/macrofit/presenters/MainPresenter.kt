@@ -75,7 +75,16 @@ class MainPresenter<V : MainViewContract.View> @Inject constructor(
     override fun editNutritionFact(nutritionFact: NutritionFact) {
         nutritionFactsRepository.updateNutritionFact(nutritionFact)
             .subscribeOn(Schedulers.io())
-            .subscribe {
+            .subscribe { _ ->
+                // After the editing of the nutrition fact, all the dependent food
+                // must also be updated with the new changes (calculations of macros)
+                foodRepository.updateFoods(nutritionFact)
+                    .subscribeOn(Schedulers.io())
+                    .subscribe {
+                        // Do nothing for now
+                    }
+                    .addToDisposables()
+
                 // Signal to listeners that the nutrition fact has been edited
                 bus.post(UpdateEvents.EditedNutritionFactEvent(nutritionFact))
             }

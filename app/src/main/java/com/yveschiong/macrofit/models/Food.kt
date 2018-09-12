@@ -7,10 +7,10 @@ import kotlinx.android.parcel.Parcelize
 @Parcelize
 @Entity(
     tableName = "food",
-    indices = [Index(value = ["fact_id", "name"], name = "index_food_fact_id_name")],
+    indices = [Index(value = ["fact_id", "name", "unit"], name = "index_food_fact_id_name_unit")],
     foreignKeys = [ForeignKey(entity = NutritionFact::class,
-        parentColumns = ["id", "name"],
-        childColumns = ["fact_id", "name"],
+        parentColumns = ["id", "name", "unit"],
+        childColumns = ["fact_id", "name", "unit"],
         onUpdate = ForeignKey.CASCADE,
         onDelete = ForeignKey.CASCADE)]
 )

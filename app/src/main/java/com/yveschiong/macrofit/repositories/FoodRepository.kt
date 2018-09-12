@@ -2,6 +2,7 @@ package com.yveschiong.macrofit.repositories
 
 import com.yveschiong.macrofit.database.daos.FoodDao
 import com.yveschiong.macrofit.models.Food
+import com.yveschiong.macrofit.models.NutritionFact
 import io.reactivex.Observable
 
 class FoodRepository(private val foodDao: FoodDao) {
@@ -19,6 +20,10 @@ class FoodRepository(private val foodDao: FoodDao) {
 
     fun updateFood(food: Food): Observable<Unit> {
         return Observable.fromCallable { foodDao.update(food) }
+    }
+
+    fun updateFoods(nutritionFact: NutritionFact): Observable<Unit> {
+        return Observable.fromCallable { foodDao.update(nutritionFact.id, nutritionFact.amount, nutritionFact.calories, nutritionFact.protein, nutritionFact.carbs, nutritionFact.fat) }
     }
 
     fun deleteFood(food: Food): Observable<Unit> {
