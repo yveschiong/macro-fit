@@ -15,8 +15,10 @@ interface MainViewContract {
         fun setTitleText(text: String)
         fun setNavViewCheckedItem(id: Int)
         fun setActionBarState(id: Int)
+        fun setViewStates(id: Int)
         fun switchToFragment(id: Int)
         fun showActivity(id: Int?)
+        fun showTotalMacroInfo(calories: Float, protein: Float, carbs: Float, fat: Float)
     }
 
     interface Presenter<V: View> : BasePresenter<V> {
@@ -32,5 +34,6 @@ interface MainViewContract {
         fun addFood(food: Food)
         fun editFood(food: Food)
         fun deleteFood(food: Food)
+        fun fetchTotalMacroInfo()
     }
 }

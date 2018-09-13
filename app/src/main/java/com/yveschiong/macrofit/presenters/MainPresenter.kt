@@ -39,6 +39,7 @@ class MainPresenter<V : MainViewContract.View> @Inject constructor(
     override fun setMenuNavigation(id: Int) {
         view?.setNavViewCheckedItem(id)
         view?.setActionBarState(id)
+        view?.setViewStates(id)
         view?.switchToFragment(id)
     }
 
@@ -129,5 +130,10 @@ class MainPresenter<V : MainViewContract.View> @Inject constructor(
                 bus.post(UpdateEvents.DeletedFoodEvent(food))
             }
             .addToDisposables()
+    }
+
+    override fun fetchTotalMacroInfo() {
+        // Template values for now
+        view?.showTotalMacroInfo(1700.0f, 200.0f, 200.0f, 100.0f)
     }
 }

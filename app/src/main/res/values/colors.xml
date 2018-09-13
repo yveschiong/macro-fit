@@ -14,4 +14,6 @@
     <color name="delete_button_text_color">#FFFFFF</color>
 
     <color name="text_color_error">#FFFF0000</color>
+
+    <color name="total_macro_info_text_color">#FFFFFF</color>
 </resources>

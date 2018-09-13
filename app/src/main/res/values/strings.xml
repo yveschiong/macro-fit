@@ -54,4 +54,11 @@
 
     <string name="edit_food_button_text">Edit Food</string>
     <string name="delete_food_button_text">Delete Food</string>
+
+    <string name="calories_label">Calories</string>
+    <string name="protein_label">Protein</string>
+    <string name="carbs_label">Carbs</string>
+    <string name="fat_label">Fat</string>
+    <string name="macro_split_label">Macro Split</string>
+    <string name="macro_split_format">%1$.1f/%2$.1f/%3$.1f</string>
 </resources>

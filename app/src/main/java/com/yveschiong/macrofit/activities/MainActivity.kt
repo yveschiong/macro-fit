@@ -24,6 +24,7 @@ import com.yveschiong.macrofit.models.Food
 import com.yveschiong.macrofit.models.NutritionFact
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
+import kotlinx.android.synthetic.main.view_total_macro_info.view.*
 import java.util.*
 import javax.inject.Inject
 
@@ -211,6 +212,10 @@ class MainActivity : BaseActivity(), MainViewContract.View {
         }
     }
 
+    override fun setViewStates(id: Int) {
+        totalMacroInfo.visibility = if (id == R.id.nav_food) View.VISIBLE else View.GONE
+    }
+
     override fun switchToFragment(id: Int) {
         if (fragments.indexOfKey(id) < 0) {
             when (id) {
@@ -222,6 +227,11 @@ class MainActivity : BaseActivity(), MainViewContract.View {
                 }
                 else -> return
             }
+        }
+
+        if (id == R.id.nav_food) {
+            // Only fetch the macro information when switched to the food fragment
+            presenter.fetchTotalMacroInfo()
         }
 
         replaceFragment(R.id.fragment, fragments[id]!!, id.toString())
@@ -240,6 +250,18 @@ class MainActivity : BaseActivity(), MainViewContract.View {
                 launchActivityForResult(AddNutritionFactActivity::class.java, Constants.REQUEST_CODE_ADD_NUTRITION_FACT)
             }
         }
+    }
+
+    override fun showTotalMacroInfo(calories: Float, protein: Float, carbs: Float, fat: Float) {
+        totalMacroInfo.calories.text = calories.toString()
+        totalMacroInfo.protein.text = protein.toString()
+        totalMacroInfo.carbs.text = carbs.toString()
+        totalMacroInfo.fat.text = fat.toString()
+
+        val total = protein + carbs + fat
+        val conversion = 100.0f / total
+
+        totalMacroInfo.macro.text = getString(R.string.macro_split_format, protein * conversion, carbs * conversion, fat * conversion)
     }
 
     private fun getCurrentNavId(): Int? {
