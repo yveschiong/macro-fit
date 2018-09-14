@@ -3,22 +3,77 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="@color/colorPrimary"
-    android:paddingBottom="@dimen/total_macro_info_padding"
-    android:paddingTop="@dimen/total_macro_info_padding">
+    android:layout_height="wrap_content">
+
+    <android.support.constraint.Guideline
+        android:id="@+id/caloriesGuide"
+        android:layout_width="wrap_content"
+        android:layout_height="1dp"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.35" />
+
+    <View
+        android:id="@+id/caloriesBackground"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@color/total_macro_info_calories_background_color"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="@+id/caloriesGuide"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <View
+        android:id="@+id/proteinBackground"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@color/total_macro_info_protein_background_color"
+        app:layout_constraintBottom_toTopOf="@+id/macroSplitBackground"
+        app:layout_constraintLeft_toRightOf="@id/caloriesBackground"
+        app:layout_constraintRight_toLeftOf="@id/carbsBackground"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <View
+        android:id="@+id/carbsBackground"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@color/total_macro_info_carbs_background_color"
+        app:layout_constraintBottom_toTopOf="@+id/macroSplitBackground"
+        app:layout_constraintLeft_toRightOf="@id/proteinBackground"
+        app:layout_constraintRight_toLeftOf="@id/fatBackground"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <View
+        android:id="@+id/fatBackground"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@color/total_macro_info_fat_background_color"
+        app:layout_constraintBottom_toTopOf="@+id/macroSplitBackground"
+        app:layout_constraintLeft_toRightOf="@id/carbsBackground"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <View
+        android:id="@+id/macroSplitBackground"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@color/total_macro_info_macro_split_background_color"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toRightOf="@id/caloriesBackground"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/proteinBackground" />
 
     <TextView
         android:id="@+id/calories"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/total_macro_info_padding"
         android:includeFontPadding="false"
         android:textColor="@color/total_macro_info_text_color"
         android:textSize="@dimen/total_macro_info_calories_text_size"
         app:layout_constraintBottom_toTopOf="@id/caloriesLabel"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toLeftOf="@id/protein"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="@id/caloriesBackground"
+        app:layout_constraintRight_toRightOf="@id/caloriesBackground"
+        app:layout_constraintTop_toTopOf="@id/caloriesBackground"
         app:layout_constraintVertical_chainStyle="packed"
         tools:text="1700" />
 
@@ -26,11 +81,12 @@
         android:id="@+id/caloriesLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/total_macro_info_padding"
         android:includeFontPadding="false"
         android:text="@string/calories_label"
         android:textColor="@color/total_macro_info_text_color"
         android:textSize="@dimen/total_macro_info_calories_label_text_size"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toBottomOf="@id/caloriesBackground"
         app:layout_constraintLeft_toLeftOf="@id/calories"
         app:layout_constraintRight_toRightOf="@id/calories"
         app:layout_constraintTop_toBottomOf="@+id/calories" />
@@ -42,8 +98,11 @@
         android:includeFontPadding="false"
         android:textColor="@color/total_macro_info_text_color"
         android:textSize="@dimen/total_macro_info_macro_text_size"
-        app:layout_constraintLeft_toRightOf="@id/calories"
-        app:layout_constraintRight_toLeftOf="@id/carbs"
+        app:layout_constraintBottom_toTopOf="@id/proteinLabel"
+        app:layout_constraintLeft_toLeftOf="@id/proteinBackground"
+        app:layout_constraintRight_toRightOf="@id/proteinBackground"
+        app:layout_constraintTop_toTopOf="@id/proteinBackground"
+        app:layout_constraintVertical_chainStyle="packed"
         tools:text="200g" />
 
     <TextView
@@ -54,6 +113,7 @@
         android:text="@string/protein_label"
         android:textColor="@color/total_macro_info_text_color"
         android:textSize="@dimen/total_macro_info_macro_label_text_size"
+        app:layout_constraintBottom_toBottomOf="@id/proteinBackground"
         app:layout_constraintLeft_toLeftOf="@id/protein"
         app:layout_constraintRight_toRightOf="@id/protein"
         app:layout_constraintTop_toBottomOf="@+id/protein" />
@@ -65,8 +125,11 @@
         android:includeFontPadding="false"
         android:textColor="@color/total_macro_info_text_color"
         android:textSize="@dimen/total_macro_info_macro_text_size"
-        app:layout_constraintLeft_toRightOf="@id/protein"
-        app:layout_constraintRight_toLeftOf="@id/fat"
+        app:layout_constraintBottom_toTopOf="@id/carbsLabel"
+        app:layout_constraintLeft_toLeftOf="@id/carbsBackground"
+        app:layout_constraintRight_toRightOf="@id/carbsBackground"
+        app:layout_constraintTop_toTopOf="@id/carbsBackground"
+        app:layout_constraintVertical_chainStyle="packed"
         tools:text="200g" />
 
     <TextView
@@ -77,6 +140,7 @@
         android:text="@string/carbs_label"
         android:textColor="@color/total_macro_info_text_color"
         android:textSize="@dimen/total_macro_info_macro_label_text_size"
+        app:layout_constraintBottom_toBottomOf="@id/carbsBackground"
         app:layout_constraintLeft_toLeftOf="@id/carbs"
         app:layout_constraintRight_toRightOf="@id/carbs"
         app:layout_constraintTop_toBottomOf="@+id/carbs" />
@@ -88,8 +152,11 @@
         android:includeFontPadding="false"
         android:textColor="@color/total_macro_info_text_color"
         android:textSize="@dimen/total_macro_info_macro_text_size"
-        app:layout_constraintLeft_toRightOf="@id/carbs"
-        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/fatLabel"
+        app:layout_constraintLeft_toLeftOf="@id/fatBackground"
+        app:layout_constraintRight_toRightOf="@id/fatBackground"
+        app:layout_constraintTop_toTopOf="@id/fatBackground"
+        app:layout_constraintVertical_chainStyle="packed"
         tools:text="200g" />
 
     <TextView
@@ -100,33 +167,36 @@
         android:text="@string/fat_label"
         android:textColor="@color/total_macro_info_text_color"
         android:textSize="@dimen/total_macro_info_macro_label_text_size"
+        app:layout_constraintBottom_toBottomOf="@id/fatBackground"
         app:layout_constraintLeft_toLeftOf="@id/fat"
         app:layout_constraintRight_toRightOf="@id/fat"
         app:layout_constraintTop_toBottomOf="@+id/fat" />
 
     <TextView
-        android:id="@+id/macro"
+        android:id="@+id/macroSplit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:includeFontPadding="false"
-        android:layout_marginTop="@dimen/total_macro_info_padding"
         android:textColor="@color/total_macro_info_text_color"
         android:textSize="@dimen/total_macro_info_macro_text_size"
-        app:layout_constraintLeft_toRightOf="@id/calories"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/carbsLabel"
+        app:layout_constraintBottom_toTopOf="@id/macroSplitLabel"
+        app:layout_constraintLeft_toLeftOf="@id/macroSplitBackground"
+        app:layout_constraintRight_toRightOf="@id/macroSplitBackground"
+        app:layout_constraintTop_toTopOf="@id/macroSplitBackground"
+        app:layout_constraintVertical_chainStyle="packed"
         tools:text="40/40/20" />
 
     <TextView
-        android:id="@+id/macroLabel"
+        android:id="@+id/macroSplitLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:includeFontPadding="false"
         android:text="@string/macro_split_label"
         android:textColor="@color/total_macro_info_text_color"
         android:textSize="@dimen/total_macro_info_macro_label_text_size"
-        app:layout_constraintLeft_toLeftOf="@id/macro"
-        app:layout_constraintRight_toRightOf="@id/macro"
-        app:layout_constraintTop_toBottomOf="@+id/macro" />
+        app:layout_constraintBottom_toBottomOf="@id/macroSplitBackground"
+        app:layout_constraintLeft_toLeftOf="@id/macroSplit"
+        app:layout_constraintRight_toRightOf="@id/macroSplit"
+        app:layout_constraintTop_toBottomOf="@+id/macroSplit" />
 
 </android.support.constraint.ConstraintLayout>

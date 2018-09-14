@@ -27,6 +27,7 @@ import kotlinx.android.synthetic.main.app_bar_main.*
 import kotlinx.android.synthetic.main.view_total_macro_info.view.*
 import java.util.*
 import javax.inject.Inject
+import kotlin.math.roundToInt
 
 class MainActivity : BaseActivity(), MainViewContract.View {
 
@@ -253,15 +254,16 @@ class MainActivity : BaseActivity(), MainViewContract.View {
     }
 
     override fun showTotalMacroInfo(calories: Float, protein: Float, carbs: Float, fat: Float) {
-        totalMacroInfo.calories.text = calories.toString()
-        totalMacroInfo.protein.text = protein.toString()
-        totalMacroInfo.carbs.text = carbs.toString()
-        totalMacroInfo.fat.text = fat.toString()
+        totalMacroInfo.calories.text = calories.roundToInt().toString()
+        totalMacroInfo.protein.text = getString(R.string.macro_format, protein.roundToInt())
+        totalMacroInfo.carbs.text = getString(R.string.macro_format, carbs.roundToInt())
+        totalMacroInfo.fat.text = getString(R.string.macro_format, fat.roundToInt())
 
         val total = protein + carbs + fat
         val conversion = 100.0f / total
 
-        totalMacroInfo.macro.text = getString(R.string.macro_split_format, protein * conversion, carbs * conversion, fat * conversion)
+        totalMacroInfo.macroSplit.text = getString(R.string.macro_split_format,
+            (protein * conversion).roundToInt(), (carbs * conversion).roundToInt(), (fat * conversion).roundToInt())
     }
 
     private fun getCurrentNavId(): Int? {

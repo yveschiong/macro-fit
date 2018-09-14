@@ -83,13 +83,19 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <include layout="@layout/content_main" />
-
-    <LinearLayout
+    <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:orientation="vertical">
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <include
+            layout="@layout/content_main"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toTopOf="@+id/totalMacroInfo"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/fab"
@@ -98,14 +104,17 @@
             android:layout_gravity="end"
             android:layout_margin="@dimen/fab_margin"
             android:tint="@android:color/white"
+            app:layout_constraintBottom_toTopOf="@+id/totalMacroInfo"
+            app:layout_constraintRight_toRightOf="parent"
             app:srcCompat="@drawable/ic_add" />
 
         <include
             android:id="@+id/totalMacroInfo"
             layout="@layout/view_total_macro_info"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent" />
 
-    </LinearLayout>
+    </android.support.constraint.ConstraintLayout>
 
 </android.support.design.widget.CoordinatorLayout>

@@ -60,5 +60,6 @@
     <string name="carbs_label">Carbs</string>
     <string name="fat_label">Fat</string>
     <string name="macro_split_label">Macro Split</string>
-    <string name="macro_split_format">%1$.1f/%2$.1f/%3$.1f</string>
+    <string name="macro_format">%1$dg</string>
+    <string name="macro_split_format">%1$d/%2$d/%3$d</string>
 </resources>
