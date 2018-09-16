@@ -17,8 +17,8 @@
 
     <color name="total_macro_info_text_color">#FFFFFF</color>
     <color name="total_macro_info_calories_background_color">#D81B60</color>
-    <color name="total_macro_info_protein_background_color">#8E24AA</color>
-    <color name="total_macro_info_carbs_background_color">#5E35B1</color>
-    <color name="total_macro_info_fat_background_color">#00ACC1</color>
-    <color name="total_macro_info_macro_split_background_color">#00897B</color>
+    <color name="total_macro_info_protein_background_color">#26A69A</color>
+    <color name="total_macro_info_carbs_background_color">#009688</color>
+    <color name="total_macro_info_fat_background_color">#00897B</color>
+    <color name="total_macro_info_macro_split_background_color">#00796B</color>
 </resources>
