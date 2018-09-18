@@ -27,7 +27,6 @@ import kotlinx.android.synthetic.main.app_bar_main.*
 import kotlinx.android.synthetic.main.view_total_macro_info.view.*
 import java.util.*
 import javax.inject.Inject
-import kotlin.math.roundToInt
 
 class MainActivity : BaseActivity(), MainViewContract.View {
 
@@ -232,7 +231,7 @@ class MainActivity : BaseActivity(), MainViewContract.View {
 
         if (id == R.id.nav_food) {
             // Only fetch the macro information when switched to the food fragment
-            presenter.fetchTotalMacroInfo()
+            presenter.fetchTotalMacroInfo(monthView.selectedDay)
         }
 
         replaceFragment(R.id.fragment, fragments[id]!!, id.toString())
@@ -253,17 +252,12 @@ class MainActivity : BaseActivity(), MainViewContract.View {
         }
     }
 
-    override fun showTotalMacroInfo(calories: Float, protein: Float, carbs: Float, fat: Float) {
-        totalMacroInfo.calories.text = calories.roundToInt().toString()
-        totalMacroInfo.protein.text = getString(R.string.macro_format, protein.roundToInt())
-        totalMacroInfo.carbs.text = getString(R.string.macro_format, carbs.roundToInt())
-        totalMacroInfo.fat.text = getString(R.string.macro_format, fat.roundToInt())
-
-        val total = protein + carbs + fat
-        val conversion = 100.0f / total
-
-        totalMacroInfo.macroSplit.text = getString(R.string.macro_split_format,
-            (protein * conversion).roundToInt(), (carbs * conversion).roundToInt(), (fat * conversion).roundToInt())
+    override fun showTotalMacroInfo(calories: Int, protein: Int, carbs: Int, fat: Int, proteinSplit: Int, carbsSplit: Int, fatSplit: Int) {
+        totalMacroInfo.calories.text = calories.toString()
+        totalMacroInfo.protein.text = getString(R.string.macro_format, protein)
+        totalMacroInfo.carbs.text = getString(R.string.macro_format, carbs)
+        totalMacroInfo.fat.text = getString(R.string.macro_format, fat)
+        totalMacroInfo.macroSplit.text = getString(R.string.macro_split_format, proteinSplit, carbsSplit, fatSplit)
     }
 
     private fun getCurrentNavId(): Int? {

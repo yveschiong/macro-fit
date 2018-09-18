@@ -3,6 +3,7 @@ package com.yveschiong.macrofit.repositories
 import com.yveschiong.macrofit.database.daos.FoodDao
 import com.yveschiong.macrofit.models.Food
 import com.yveschiong.macrofit.models.NutritionFact
+import com.yveschiong.macrofit.models.TotalFoodMacroInfo
 import io.reactivex.Observable
 
 class FoodRepository(private val foodDao: FoodDao) {
@@ -12,6 +13,10 @@ class FoodRepository(private val foodDao: FoodDao) {
 
     fun getFoodBetweenTime(from: Long, to: Long): Observable<List<Food>> {
         return foodDao.getFoodBetweenTime(from, to).toObservable()
+    }
+
+    fun getTotalFoodMacroInfo(from: Long, to: Long): Observable<TotalFoodMacroInfo> {
+        return foodDao.getTotalFoodMacroInfo(from, to).toObservable()
     }
 
     fun addFood(food: Food): Observable<Unit> {

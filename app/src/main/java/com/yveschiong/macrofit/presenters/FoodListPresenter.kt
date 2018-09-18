@@ -7,11 +7,12 @@ import com.yveschiong.macrofit.bus.events.UpdateEvents
 import com.yveschiong.macrofit.contracts.FoodViewContract
 import com.yveschiong.macrofit.models.Food
 import com.yveschiong.macrofit.repositories.FoodRepository
+import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
-class FoodListPresenter<V: FoodViewContract.View> @Inject constructor(
+class FoodListPresenter<V : FoodViewContract.View> @Inject constructor(
     private val bus: EventBus,
     private val foodRepository: FoodRepository
 ) : RootPresenter<V>(), FoodViewContract.Presenter<V> {
@@ -36,11 +37,17 @@ class FoodListPresenter<V: FoodViewContract.View> @Inject constructor(
 
         // For now, the add, edit, and delete events will just cause
         // a complete fetch of the food table
-        bus.listen<UpdateEvents.AddedFoodEvent>()
-            .subscribeOn(Schedulers.io())
-            .switchMap { event ->
+        bus.listen<UpdateEvents.AddedFoodEvent>().handleFoodEvent()
+        bus.listen<UpdateEvents.EditedFoodEvent>().handleFoodEvent()
+        bus.listen<UpdateEvents.DeletedFoodEvent>().handleFoodEvent()
+    }
+
+    // Handles any similar processes
+    private fun Observable<out UpdateEvents.FoodEvent>.handleFoodEvent() {
+        subscribeOn(Schedulers.io())
+            .switchMap { it ->
                 val calendar = CalendarUtils.createCalendar()
-                calendar.timeInMillis = event.food.dayTimestamp
+                calendar.timeInMillis = it.food.dayTimestamp
                 val range = CalendarUtils.createCalendarRange(calendar)
 
                 // Get new foods that match the day criteria
@@ -49,39 +56,7 @@ class FoodListPresenter<V: FoodViewContract.View> @Inject constructor(
                 ).subscribeOn(Schedulers.io())
             }
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe { view.showFood(it) }
-            .addToDisposables()
-
-        bus.listen<UpdateEvents.EditedFoodEvent>()
-            .subscribeOn(Schedulers.io())
-            .switchMap { event ->
-                val calendar = CalendarUtils.createCalendar()
-                calendar.timeInMillis = event.food.dayTimestamp
-                val range = CalendarUtils.createCalendarRange(calendar)
-
-                // Get new foods that match the day criteria
-                foodRepository.getFoodBetweenTime(
-                    range.start.timeInMillis, range.end.timeInMillis
-                ).subscribeOn(Schedulers.io())
-            }
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe { view.showFood(it) }
-            .addToDisposables()
-
-        bus.listen<UpdateEvents.DeletedFoodEvent>()
-            .subscribeOn(Schedulers.io())
-            .switchMap { event ->
-                val calendar = CalendarUtils.createCalendar()
-                calendar.timeInMillis = event.food.dayTimestamp
-                val range = CalendarUtils.createCalendarRange(calendar)
-
-                // Get new foods that match the day criteria
-                foodRepository.getFoodBetweenTime(
-                    range.start.timeInMillis, range.end.timeInMillis
-                ).subscribeOn(Schedulers.io())
-            }
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe { view.showFood(it) }
+            .subscribe { view?.showFood(it) }
             .addToDisposables()
     }
 

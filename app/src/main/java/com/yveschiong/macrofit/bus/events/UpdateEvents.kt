@@ -4,10 +4,13 @@ import com.yveschiong.macrofit.models.Food
 import com.yveschiong.macrofit.models.NutritionFact
 
 class UpdateEvents {
-    class AddedNutritionFactEvent(val nutritionFact: NutritionFact): Event()
-    class EditedNutritionFactEvent(val nutritionFact: NutritionFact): Event()
-    class DeletedNutritionFactEvent(val nutritionFact: NutritionFact): Event()
-    class AddedFoodEvent(val food: Food): Event()
-    class EditedFoodEvent(val food: Food): Event()
-    class DeletedFoodEvent(val food: Food): Event()
+    open class NutritionFactEvent(val nutritionFact: NutritionFact): Event()
+    class AddedNutritionFactEvent(nutritionFact: NutritionFact) : NutritionFactEvent(nutritionFact)
+    class EditedNutritionFactEvent(nutritionFact: NutritionFact) : NutritionFactEvent(nutritionFact)
+    class DeletedNutritionFactEvent(nutritionFact: NutritionFact) : NutritionFactEvent(nutritionFact)
+
+    open class FoodEvent(val food: Food): Event()
+    class AddedFoodEvent(food: Food) : FoodEvent(food)
+    class EditedFoodEvent(food: Food) : FoodEvent(food)
+    class DeletedFoodEvent(food: Food) : FoodEvent(food)
 }
