@@ -5,6 +5,7 @@ import com.yveschiong.macrofit.activities.*
 import com.yveschiong.macrofit.bus.EventBus
 import com.yveschiong.macrofit.fragments.FoodFragment
 import com.yveschiong.macrofit.fragments.NutritionFactsFragment
+import com.yveschiong.macrofit.fragments.USDASearchFragment
 import com.yveschiong.macrofit.repositories.FoodRepository
 import com.yveschiong.macrofit.repositories.NutritionFactsRepository
 import dagger.Component
@@ -25,4 +26,5 @@ interface AppComponent {
     fun inject(activity: EditFoodActivity)
     fun inject(fragment: FoodFragment)
     fun inject(fragment: NutritionFactsFragment)
+    fun inject(fragment: USDASearchFragment)
 }

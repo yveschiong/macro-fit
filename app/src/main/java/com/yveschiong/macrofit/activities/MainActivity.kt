@@ -20,6 +20,7 @@ import com.yveschiong.macrofit.extensions.launchActivityForResult
 import com.yveschiong.macrofit.extensions.replaceFragment
 import com.yveschiong.macrofit.fragments.FoodFragment
 import com.yveschiong.macrofit.fragments.NutritionFactsFragment
+import com.yveschiong.macrofit.fragments.USDASearchFragment
 import com.yveschiong.macrofit.models.Food
 import com.yveschiong.macrofit.models.NutritionFact
 import kotlinx.android.synthetic.main.activity_main.*
@@ -208,12 +209,16 @@ class MainActivity : BaseActivity(), MainViewContract.View {
             R.id.nav_nutrition_facts -> {
                 setTitleText(getString(R.string.nutrition_facts))
             }
+            R.id.nav_usda_search -> {
+                setTitleText(getString(R.string.usda_search))
+            }
             else -> return
         }
     }
 
     override fun setViewStates(id: Int) {
         totalMacroInfo.visibility = if (id == R.id.nav_food) View.VISIBLE else View.GONE
+        fab.visibility = if (id == R.id.nav_usda_search) View.GONE else View.VISIBLE
     }
 
     override fun switchToFragment(id: Int) {
@@ -224,6 +229,9 @@ class MainActivity : BaseActivity(), MainViewContract.View {
                 }
                 R.id.nav_nutrition_facts -> {
                     fragments.put(id, NutritionFactsFragment.newInstance())
+                }
+                R.id.nav_usda_search -> {
+                    fragments.put(id, USDASearchFragment.newInstance())
                 }
                 else -> return
             }

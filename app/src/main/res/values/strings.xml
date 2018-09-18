@@ -62,4 +62,8 @@
     <string name="macro_split_label">Macro Split</string>
     <string name="macro_format">%1$dg</string>
     <string name="macro_split_format">%1$d/%2$d/%3$d</string>
+
+    <string name="usda_search">USDA Search</string>
+    <string name="no_usda_search_results">No search results.</string>
+
 </resources>

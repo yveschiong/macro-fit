@@ -12,6 +12,10 @@
     <dimen name="card_food_vertical_margins">1dp</dimen>
     <dimen name="card_food_inner_margins">10dp</dimen>
 
+    <dimen name="card_search_horizontal_margins">3dp</dimen>
+    <dimen name="card_search_vertical_margins">1dp</dimen>
+    <dimen name="card_search_inner_margins">5dp</dimen>
+
     <dimen name="add_nutrition_fact_page_padding">5dp</dimen>
     <dimen name="add_food_page_padding">5dp</dimen>
 

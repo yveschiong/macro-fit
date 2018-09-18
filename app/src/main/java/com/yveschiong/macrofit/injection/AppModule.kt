@@ -105,4 +105,11 @@ class AppModule(private val context: Context) {
         NutritionFactsViewContract.Presenter<NutritionFactsViewContract.View> {
         return presenter
     }
+
+    @Provides
+    @Singleton
+    fun provideUSDASearchListPresenter(presenter: USDASearchListPresenter<USDASearchViewContract.View>):
+        USDASearchViewContract.Presenter<USDASearchViewContract.View> {
+        return presenter
+    }
 }
