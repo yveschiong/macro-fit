@@ -1,11 +1,16 @@
 package com.yveschiong.macrofit.activities
 
 import android.app.Activity
+import android.app.SearchManager
+import android.content.Context
 import android.content.Intent
+import android.graphics.PorterDuff
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v4.content.ContextCompat
 import android.support.v4.view.GravityCompat
 import android.support.v7.app.ActionBarDrawerToggle
+import android.support.v7.widget.SearchView
 import android.util.SparseArray
 import android.view.Menu
 import android.view.MenuItem
@@ -29,12 +34,15 @@ import kotlinx.android.synthetic.main.view_total_macro_info.view.*
 import java.util.*
 import javax.inject.Inject
 
+
 class MainActivity : BaseActivity(), MainViewContract.View {
 
     @Inject
     lateinit var presenter: MainViewContract.Presenter<MainViewContract.View>
 
     private var fragments = SparseArray<Fragment>()
+
+    private var menu: Menu? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -64,7 +72,7 @@ class MainActivity : BaseActivity(), MainViewContract.View {
 
         // We only want to set this on first entry of the activity
         if (savedInstanceState == null) {
-            presenter.setMenuNavigation(R.id.nav_food)
+            presenter.setMenuNavigation(R.id.nav_usda_search)
         } else {
             // We still would need to set the other data relating to the action bar state
             getCurrentNavId()?.let { setActionBarState(it) }
@@ -152,18 +160,76 @@ class MainActivity : BaseActivity(), MainViewContract.View {
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        this.menu = menu
+
         // Inflate the menu; this adds items to the action bar if it is present.
         menuInflater.inflate(R.menu.main, menu)
+
+        // Update the menu again in case the menu was updated before menu creation
+        onPrepareOptionsMenu(menu, getCurrentNavId() ?: 0)
+
         return true
+    }
+
+    override fun onPrepareOptionsMenu(menu: Menu?): Boolean {
+        // Change all menu item colors to white
+        menu?.let {
+            for (i in 0 until it.size()) {
+                val drawable = it.getItem(i).icon
+                if (drawable != null) {
+                    drawable.mutate()
+                    drawable.setColorFilter(ContextCompat.getColor(this, android.R.color.white), PorterDuff.Mode.SRC_ATOP)
+                }
+            }
+        }
+
+        return super.onPrepareOptionsMenu(menu)
+    }
+
+    // Requires the menu and the navigation id
+    private fun onPrepareOptionsMenu(menu: Menu?, id: Int) {
+        onPrepareOptionsMenu(menu)
+
+        // Set all search views to be invisible by default
+        val searchView = menu?.findItem(R.id.search)
+        searchView?.isVisible = false
+
+        // Check if the next navigation id is usda search
+        if (id == R.id.nav_usda_search) {
+            // Show search only when in the search navigation
+            searchView?.isVisible = true
+
+            // Associate searchable configuration with the SearchView
+            val searchManager = getSystemService(Context.SEARCH_SERVICE) as SearchManager
+            searchView?.actionView?.let {
+                (it as SearchView)
+                    .apply {
+                        setSearchableInfo(searchManager.getSearchableInfo(componentName))
+                    }
+                    // Set the query text listener so we can act on the text input in search
+                    .setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+                        override fun onQueryTextSubmit(query: String?): Boolean {
+                            presenter.search(query)
+                            return true
+                        }
+
+                        override fun onQueryTextChange(newText: String?): Boolean {
+                            presenter.search(newText)
+                            return true
+                        }
+
+                    })
+            }
+        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        when (item.itemId) {
-            R.id.action_settings -> return true
-            else -> return super.onOptionsItemSelected(item)
+        return when (item.itemId) {
+            R.id.action_settings -> true
+            else -> super.onOptionsItemSelected(item)
         }
     }
 
@@ -199,6 +265,7 @@ class MainActivity : BaseActivity(), MainViewContract.View {
 
     override fun setActionBarState(id: Int) {
         datePicker.visibility = View.GONE
+
         when (id) {
             R.id.nav_food -> {
                 datePicker.visibility = View.VISIBLE
@@ -243,6 +310,10 @@ class MainActivity : BaseActivity(), MainViewContract.View {
         }
 
         replaceFragment(R.id.fragment, fragments[id]!!, id.toString())
+    }
+
+    override fun invalidateActionBarMenu(id: Int) {
+        onPrepareOptionsMenu(menu, id)
     }
 
     override fun showActivity(id: Int?) {

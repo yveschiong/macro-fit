@@ -11,7 +11,7 @@ interface USDASearchViewContract {
     }
 
     interface Presenter<V: View> : BasePresenter<V> {
-        fun fetchSearchResults()
+        fun fetchSearchResults(query: String?)
         fun onSearchResultClicked(searchResult: SearchResult)
     }
 }

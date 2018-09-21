@@ -3,6 +3,7 @@ package com.yveschiong.macrofit.presenters
 import com.yveschiong.easycalendar.utils.CalendarUtils
 import com.yveschiong.macrofit.bus.EventBus
 import com.yveschiong.macrofit.bus.events.DateEvents
+import com.yveschiong.macrofit.bus.events.QueryTextEvent
 import com.yveschiong.macrofit.bus.events.UpdateEvents
 import com.yveschiong.macrofit.contracts.MainViewContract
 import com.yveschiong.macrofit.extensions.getNormalString
@@ -60,6 +61,7 @@ class MainPresenter<V : MainViewContract.View> @Inject constructor(
         view?.setActionBarState(id)
         view?.setViewStates(id)
         view?.switchToFragment(id)
+        view?.invalidateActionBarMenu(id)
     }
 
     override fun changeMonthViewSelectedDay(day: Calendar) {
@@ -165,5 +167,9 @@ class MainPresenter<V : MainViewContract.View> @Inject constructor(
                 view?.showTotalMacroInfo(it.calories.roundToInt(), it.protein.roundToInt(), it.carbs.roundToInt(), it.fat.roundToInt(),
                     (it.protein * conversion).roundToInt(), (it.carbs * conversion).roundToInt(), (it.fat * conversion).roundToInt())
             }
+    }
+
+    override fun search(query: String?) {
+        bus.post(QueryTextEvent(query))
     }
 }

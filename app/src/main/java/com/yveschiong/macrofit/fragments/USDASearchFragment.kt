@@ -43,7 +43,6 @@ class USDASearchFragment : BaseFragment(), USDASearchViewContract.View {
         App.graph.inject(this)
 
         presenter.onAttach(this)
-        presenter.fetchSearchResults()
 
         return view
     }

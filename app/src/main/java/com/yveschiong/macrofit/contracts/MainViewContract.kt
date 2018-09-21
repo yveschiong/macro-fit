@@ -17,6 +17,7 @@ interface MainViewContract {
         fun setActionBarState(id: Int)
         fun setViewStates(id: Int)
         fun switchToFragment(id: Int)
+        fun invalidateActionBarMenu(id: Int)
         fun showActivity(id: Int?)
         fun showTotalMacroInfo(calories: Int, protein: Int, carbs: Int, fat: Int,
                                proteinSplit: Int, carbsSplit: Int, fatSplit: Int)
@@ -36,5 +37,6 @@ interface MainViewContract {
         fun editFood(food: Food)
         fun deleteFood(food: Food)
         fun fetchTotalMacroInfo(day: Calendar)
+        fun search(query: String?)
     }
 }
