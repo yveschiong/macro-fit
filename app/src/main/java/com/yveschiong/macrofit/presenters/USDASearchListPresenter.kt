@@ -14,13 +14,14 @@ class USDASearchListPresenter<V : USDASearchViewContract.View> @Inject construct
 ) : RootPresenter<V>(), USDASearchViewContract.Presenter<V> {
 
     override fun onAttach(view: V) {
+        super.onAttach(view)
         // Do nothing for now
     }
 
     override fun fetchSearchResults() {
         // Make a default fetch for now
         searchApi.getSearchResults("brown rice")
-            .call { view?.showSearchResults(it) }
+            .call { view?.showSearchResults(it.list) }
     }
 
     override fun onSearchResultClicked(searchResult: SearchResult) {

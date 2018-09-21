@@ -7,10 +7,10 @@ import com.google.gson.JsonElement
 import java.lang.reflect.Type
 
 
-class SearchDeserializer : JsonDeserializer<List<SearchResult>> {
-    override fun deserialize(json: JsonElement?, typeOfT: Type?, context: JsonDeserializationContext?): List<SearchResult>? {
+class SearchDeserializer : JsonDeserializer<SearchResultList> {
+    override fun deserialize(json: JsonElement?, typeOfT: Type?, context: JsonDeserializationContext?): SearchResultList? {
         // Get the element from the parsed JSON
-        val content = json?.asJsonObject?.get("list")?.asJsonObject?.getAsJsonObject("item")
+        val content = json?.asJsonObject?.get("list")?.asJsonObject
 
         // Deserialize it. Use a new instance of Gson to avoid infinite recursion to this deserializer
         return Gson().fromJson(content, typeOfT)

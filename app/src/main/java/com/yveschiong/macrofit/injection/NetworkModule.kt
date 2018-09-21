@@ -1,12 +1,11 @@
 package com.yveschiong.macrofit.injection
 
 import com.google.gson.GsonBuilder
-import com.google.gson.reflect.TypeToken
 import com.yveschiong.macrofit.constants.Constants
 import com.yveschiong.macrofit.network.ApiInterceptor
 import com.yveschiong.macrofit.network.search.SearchApi
 import com.yveschiong.macrofit.network.search.SearchDeserializer
-import com.yveschiong.macrofit.network.search.SearchResult
+import com.yveschiong.macrofit.network.search.SearchResultList
 import dagger.Module
 import dagger.Provides
 import dagger.Reusable
@@ -30,7 +29,7 @@ class NetworkModule {
         return Retrofit.Builder()
             .baseUrl(Constants.BASE_URL)
             .addConverterFactory(GsonConverterFactory.create(GsonBuilder()
-                .registerTypeAdapter(object : TypeToken<List<SearchResult>>() {}.type, SearchDeserializer()).create()))
+                .registerTypeAdapter(SearchResultList::class.java, SearchDeserializer()).create()))
             .addCallAdapterFactory(RxJava2CallAdapterFactory.createWithScheduler(Schedulers.io()))
             .client(OkHttpClient.Builder().addInterceptor(ApiInterceptor()).build())
             .build()

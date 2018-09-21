@@ -22,5 +22,5 @@ interface SearchApi {
         @Query("ds") dataSource: String = "Standard Reference",
 
         @Query("fg") foodGroupId: String = ""
-    ): Observable<List<SearchResult>>
+    ): Observable<SearchResultList>
 }
