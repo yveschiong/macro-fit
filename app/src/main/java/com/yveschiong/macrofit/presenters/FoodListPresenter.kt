@@ -65,10 +65,7 @@ class FoodListPresenter<V : FoodViewContract.View> @Inject constructor(
         val range = CalendarUtils.createCalendarRange()
 
         foodRepository.getFoodBetweenTime(range.start.timeInMillis, range.end.timeInMillis)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe { view?.showFood(it) }
-            .addToDisposables()
+            .call { view?.showFood(it) }
     }
 
     override fun onCardClicked(food: Food) {

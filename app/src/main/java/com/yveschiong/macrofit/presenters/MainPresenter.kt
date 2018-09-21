@@ -11,7 +11,6 @@ import com.yveschiong.macrofit.models.NutritionFact
 import com.yveschiong.macrofit.repositories.FoodRepository
 import com.yveschiong.macrofit.repositories.NutritionFactsRepository
 import io.reactivex.Observable
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import java.util.*
 import javax.inject.Inject
@@ -27,16 +26,13 @@ class MainPresenter<V : MainViewContract.View> @Inject constructor(
         super.onAttach(view)
 
         bus.listen<DateEvents.SwitchedDateEvent>()
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe {
+            .call {
                 // Set the action bar text
                 view.setTitleText(it.switchedDate.time.getNormalString())
 
                 // Fetch for the total macro info of the food for the selected day
                 fetchTotalMacroInfo(it.switchedDate)
             }
-            .addToDisposables()
 
         // For now, the add, edit, and delete events will just cause
         // a fetch for the total food macro info for that day
@@ -47,15 +43,12 @@ class MainPresenter<V : MainViewContract.View> @Inject constructor(
 
     // Handles any similar processes
     private fun Observable<out UpdateEvents.FoodEvent>.handleFoodEvent() {
-        subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe {
-                val day = CalendarUtils.createCalendar()
-                day.timeInMillis = it.food.dayTimestamp
+        call {
+            val day = CalendarUtils.createCalendar()
+            day.timeInMillis = it.food.dayTimestamp
 
-                fetchTotalMacroInfo(day)
-            }
-            .addToDisposables()
+            fetchTotalMacroInfo(day)
+        }
     }
 
     override fun onCalendarIconSelected() {
@@ -163,9 +156,7 @@ class MainPresenter<V : MainViewContract.View> @Inject constructor(
 
         // Fetch for the total macro info of the food for the selected day
         foodRepository.getTotalFoodMacroInfo(range.start.timeInMillis, range.end.timeInMillis)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe {
+            .call {
                 val total = it.protein + it.carbs + it.fat
                 // Ignore 0 totals
                 val conversion = if (total == 0.0f) 0.0f else 100.0f / total
@@ -174,6 +165,5 @@ class MainPresenter<V : MainViewContract.View> @Inject constructor(
                 view?.showTotalMacroInfo(it.calories.roundToInt(), it.protein.roundToInt(), it.carbs.roundToInt(), it.fat.roundToInt(),
                     (it.protein * conversion).roundToInt(), (it.carbs * conversion).roundToInt(), (it.fat * conversion).roundToInt())
             }
-            .addToDisposables()
     }
 }

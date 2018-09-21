@@ -3,8 +3,6 @@ package com.yveschiong.macrofit.presenters
 import com.yveschiong.macrofit.constants.ResponseCode
 import com.yveschiong.macrofit.contracts.AddNutritionFactViewContract
 import com.yveschiong.macrofit.repositories.NutritionFactsRepository
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
 class AddNutritionFactPresenter<V : AddNutritionFactViewContract.View> @Inject constructor(
@@ -33,9 +31,7 @@ class AddNutritionFactPresenter<V : AddNutritionFactViewContract.View> @Inject c
 
         // Check the database to see if the name already exists
         nutritionFactsRepository.alreadyExists(input)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe {
+            .call {
                 if (it) {
                     // Show an error message for the value being a duplicate
                     view?.tryShowFoodNameErrorMessage(ResponseCode.FIELD_VALUE_ALREADY_EXISTS)
@@ -44,7 +40,6 @@ class AddNutritionFactPresenter<V : AddNutritionFactViewContract.View> @Inject c
                     successFunc()
                 }
             }
-            .addToDisposables()
     }
 
     override fun validateWeight(input: String): Boolean {

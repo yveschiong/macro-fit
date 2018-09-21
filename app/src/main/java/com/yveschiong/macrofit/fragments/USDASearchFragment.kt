@@ -10,6 +10,8 @@ import com.yveschiong.macrofit.R
 import com.yveschiong.macrofit.adapters.recyclerview.USDASearchListAdapter
 import com.yveschiong.macrofit.contracts.USDASearchViewContract
 import com.yveschiong.macrofit.extensions.afterMeasured
+import com.yveschiong.macrofit.interfaces.OnAdapterViewClicked
+import com.yveschiong.macrofit.network.search.SearchResult
 import kotlinx.android.synthetic.main.fragment_food.view.*
 import javax.inject.Inject
 
@@ -18,7 +20,11 @@ class USDASearchFragment : BaseFragment(), USDASearchViewContract.View {
     @Inject
     lateinit var presenter: USDASearchViewContract.Presenter<USDASearchViewContract.View>
 
-    private val adapter: USDASearchListAdapter = USDASearchListAdapter()
+    private val adapter: USDASearchListAdapter = USDASearchListAdapter(ArrayList(), object : OnAdapterViewClicked.SearchResultView {
+        override fun onViewClicked(searchResult: SearchResult) {
+            presenter.onSearchResultClicked(searchResult)
+        }
+    })
 
     companion object {
         fun newInstance(): USDASearchFragment {
@@ -37,6 +43,7 @@ class USDASearchFragment : BaseFragment(), USDASearchViewContract.View {
         App.graph.inject(this)
 
         presenter.onAttach(this)
+        presenter.fetchSearchResults()
 
         return view
     }
@@ -44,5 +51,14 @@ class USDASearchFragment : BaseFragment(), USDASearchViewContract.View {
     override fun onDestroyView() {
         presenter.onDetach()
         super.onDestroyView()
+    }
+
+    override fun showSearchResults(searchResultsList: List<SearchResult>) {
+        adapter.setData(searchResultsList)
+        adapter.notifyDataSetChanged()
+    }
+
+    override fun showSearchResultDetailActivity(searchResult: SearchResult) {
+
     }
 }

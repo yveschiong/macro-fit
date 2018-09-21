@@ -2,8 +2,11 @@ package com.yveschiong.macrofit.presenters
 
 import com.yveschiong.macrofit.interfaces.BasePresenter
 import com.yveschiong.macrofit.interfaces.BaseView
+import io.reactivex.Observable
+import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
+import io.reactivex.schedulers.Schedulers
 
 open class RootPresenter<V: BaseView> : BasePresenter<V> {
 
@@ -20,6 +23,17 @@ open class RootPresenter<V: BaseView> : BasePresenter<V> {
     override fun onDetach() {
         disposables.clear()
         view = null
+    }
+
+    // Local extension function so children presenters can easily
+    // call a simple function without too much boilerplate code
+    protected fun <T> Observable<T>.call(callback: (T) -> Unit) {
+        subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe {
+                callback(it)
+            }
+            .addToDisposables()
     }
 
     // Local extension function so children presenters can easily chain a call after subscribe

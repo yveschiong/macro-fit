@@ -16,4 +16,10 @@ object Constants {
     const val REQUEST_CODE_EDIT_FOOD = 4
 
     const val DB_TESTING = true
+
+    // Base url for the usda search api
+    const val BASE_URL = "https://api.nal.usda.gov/ndb/"
+
+    // Usda Api Key
+    const val API_KEY = "PRDHVl96gkByT2fSrxp2znM722a2QeHYjB2dbmvy"
 }

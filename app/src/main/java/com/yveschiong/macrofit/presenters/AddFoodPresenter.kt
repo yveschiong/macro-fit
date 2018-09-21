@@ -5,8 +5,6 @@ import com.yveschiong.macrofit.contracts.AddFoodViewContract
 import com.yveschiong.macrofit.models.Food
 import com.yveschiong.macrofit.models.NutritionFact
 import com.yveschiong.macrofit.repositories.NutritionFactsRepository
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
 class AddFoodPresenter<V : AddFoodViewContract.View> @Inject constructor(
@@ -15,10 +13,7 @@ class AddFoodPresenter<V : AddFoodViewContract.View> @Inject constructor(
 
     override fun fetchNutritionFacts() {
         nutritionFactsRepository.getNutritionFacts()
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe { view?.showNutritionFacts(it) }
-            .addToDisposables()
+            .call { view?.showNutritionFacts(it) }
     }
 
     override fun selectNutritionFact(nutritionFact: NutritionFact) {

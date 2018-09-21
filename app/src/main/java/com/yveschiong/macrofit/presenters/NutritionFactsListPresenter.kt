@@ -5,6 +5,7 @@ import com.yveschiong.macrofit.bus.events.UpdateEvents
 import com.yveschiong.macrofit.contracts.NutritionFactsViewContract
 import com.yveschiong.macrofit.models.NutritionFact
 import com.yveschiong.macrofit.repositories.NutritionFactsRepository
+import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
@@ -19,23 +20,14 @@ class NutritionFactsListPresenter<V : NutritionFactsViewContract.View> @Inject c
 
         // For now, the add, edit, and delete events will just cause
         // a complete fetch of the nutrition facts table
-        bus.listen<UpdateEvents.AddedNutritionFactEvent>()
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe { fetchNutrition() }
-            .addToDisposables()
+        bus.listen<UpdateEvents.AddedNutritionFactEvent>().handleNutritionFactEvent()
+        bus.listen<UpdateEvents.EditedNutritionFactEvent>().handleNutritionFactEvent()
+        bus.listen<UpdateEvents.DeletedNutritionFactEvent>().handleNutritionFactEvent()
+    }
 
-        bus.listen<UpdateEvents.EditedNutritionFactEvent>()
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe { fetchNutrition() }
-            .addToDisposables()
-
-        bus.listen<UpdateEvents.DeletedNutritionFactEvent>()
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe { fetchNutrition() }
-            .addToDisposables()
+    // Handles any similar processes
+    private fun Observable<out UpdateEvents.NutritionFactEvent>.handleNutritionFactEvent() {
+        call { fetchNutrition() }
     }
 
     override fun fetchNutrition() {
