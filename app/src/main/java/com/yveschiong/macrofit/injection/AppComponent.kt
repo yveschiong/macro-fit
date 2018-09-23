@@ -13,7 +13,7 @@ import dagger.Component
 import javax.inject.Singleton
 
 @Singleton
-@Component(modules = arrayOf(AppModule::class, DatabaseModule::class, PresenterModule::class, NetworkModule::class))
+@Component(modules = [ContextModule::class, DatabaseModule::class, EventModule::class, NetworkModule::class, PresenterModule::class])
 interface AppComponent {
     val context: Context
     val bus: EventBus
