@@ -1,5 +1,6 @@
 package com.yveschiong.macrofit.search
 
+import com.nhaarman.mockito_kotlin.any
 import com.nhaarman.mockito_kotlin.doReturn
 import com.nhaarman.mockito_kotlin.never
 import com.nhaarman.mockito_kotlin.verify
@@ -48,29 +49,32 @@ class USDASearchTests : UnitTests() {
     }
 
     @Test
-    fun `Do a search, when the query is null, then it should show an empty list`() {
+    fun `Do a search, when the query is null, then it should show an empty list without calling the search api`() {
         val query = null
 
         presenter.fetchSearchResults(query)
 
+        verify(searchApi, never()).getSearchResults(any(), any(), any(), any(), any(), any())
         verify(view, never()).showSearchResults(ArgumentMatchers.anyList())
     }
 
     @Test
-    fun `Do a search, when the query is an empty string, then it should show an empty list`() {
+    fun `Do a search, when the query is an empty string, then it should show an empty list without calling the search api`() {
         val query = ""
 
         presenter.fetchSearchResults(query)
 
+        verify(searchApi, never()).getSearchResults(any(), any(), any(), any(), any(), any())
         verify(view).showSearchResults(ArgumentMatchers.anyList())
     }
 
     @Test
-    fun `Do a search, when the query is a string with a single character, then it should show an empty list`() {
+    fun `Do a search, when the query is a string with a single character, then it should show an empty list without calling the search api`() {
         val query = "a"
 
         presenter.fetchSearchResults(query)
 
+        verify(searchApi, never()).getSearchResults(any(), any(), any(), any(), any(), any())
         verify(view).showSearchResults(ArgumentMatchers.anyList())
     }
 
@@ -85,6 +89,7 @@ class USDASearchTests : UnitTests() {
 
         presenter.fetchSearchResults(query)
 
+        verify(searchApi).getSearchResults(query)
         verify(view).showSearchResults(searchResultList.list)
     }
 
@@ -98,6 +103,7 @@ class USDASearchTests : UnitTests() {
 
         presenter.fetchSearchResults(query)
 
+        verify(searchApi).getSearchResults(query)
         verify(view).showSearchResults(ArgumentMatchers.anyList())
     }
 
@@ -113,6 +119,7 @@ class USDASearchTests : UnitTests() {
 
         bus.post(queryTextEvent)
 
+        verify(searchApi).getSearchResults(query)
         verify(view).showSearchResults(searchResultList.list)
     }
 }
