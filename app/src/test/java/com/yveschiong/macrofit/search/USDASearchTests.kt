@@ -48,7 +48,7 @@ class USDASearchTests : UnitTests() {
     }
 
     @Test
-    fun search_withNullQuery_doesNothing() {
+    fun `Do a search, when the query is null, then it should show an empty list`() {
         val query = null
 
         presenter.fetchSearchResults(query)
@@ -57,7 +57,7 @@ class USDASearchTests : UnitTests() {
     }
 
     @Test
-    fun search_withEmptyQuery_returnsEmptyList() {
+    fun `Do a search, when the query is an empty string, then it should show an empty list`() {
         val query = ""
 
         presenter.fetchSearchResults(query)
@@ -66,7 +66,7 @@ class USDASearchTests : UnitTests() {
     }
 
     @Test
-    fun search_withQueryOfLength1_returnsEmptyList() {
+    fun `Do a search, when the query is a string with a single character, then it should show an empty list`() {
         val query = "a"
 
         presenter.fetchSearchResults(query)
@@ -75,7 +75,7 @@ class USDASearchTests : UnitTests() {
     }
 
     @Test
-    fun search_withQueryOfNormalLength_returnsSearchResultList() {
+    fun `Do a search, when the query is one of an appropriate length, then it should make a call to the search api for results and the view should show the results list`() {
         val query = "brown rice"
         val searchResultList = SearchResultList(arrayListOf(SearchResult()))
 
@@ -89,7 +89,7 @@ class USDASearchTests : UnitTests() {
     }
 
     @Test
-    fun search_withQueryOfNormalLength_returnsNoSearchResultList() {
+    fun `Do a search, when the query is one of an appropriate length and with no api result, then the search api should return an error and the view should show an empty list`() {
         val query = "brown rice"
 
         doReturn(Observable.error<SearchResultList>(Exception("Couldn't find any results")))
@@ -102,7 +102,7 @@ class USDASearchTests : UnitTests() {
     }
 
     @Test
-    fun search_withQueryEvent_returnsSearchResultList() {
+    fun `Do a search, when a query text event is posted to the event bus with a legal query, then it should make a call to the search api for results and the view should show the results list`() {
         val query = "brown rice"
         val queryTextEvent = QueryTextEvent(query)
         val searchResultList = SearchResultList(arrayListOf(SearchResult()))
