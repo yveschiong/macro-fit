@@ -110,14 +110,13 @@ class USDASearchTests : UnitTests() {
     @Test
     fun `Do a search, when a query text event is posted to the event bus with a legal query, then it should make a call to the search api for results and the view should show the results list`() {
         val query = "brown rice"
-        val queryTextEvent = QueryTextEvent(query)
         val searchResultList = SearchResultList(arrayListOf(SearchResult()))
 
         doReturn(Observable.just(searchResultList))
             .`when`(searchApi)
             .getSearchResults(query)
 
-        bus.post(queryTextEvent)
+        bus.post(QueryTextEvent(query))
 
         verify(searchApi).getSearchResults(query)
         verify(view).showSearchResults(searchResultList.list)
